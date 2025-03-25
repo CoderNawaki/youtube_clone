@@ -14,6 +14,7 @@ const [videos,setVideos]=useState([]);
       try{
         const data = await fetchFromAPI(`search?part=snippet&q=${selectedCategory}&maxResults=50`);
         setVideos(data.items);
+        console.log(data);
       }catch(error){
         console.error('Error fetchoing videos:',error);
       }
