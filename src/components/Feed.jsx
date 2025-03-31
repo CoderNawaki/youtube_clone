@@ -12,7 +12,7 @@ const [videos,setVideos]=useState([]);
 
     const fetchVideos = async()=>{
       try{
-        const data = await fetchFromAPI(`search?part=snippet&q=${selectedCategory}&maxResults=50`);
+        const data = await fetchFromAPI(`search?part=snippet&q=${selectedCategory}`);
         setVideos(data.items);
         console.log(data);
       }catch(error){
@@ -37,7 +37,7 @@ const [videos,setVideos]=useState([]);
           <span style={{color:'#F31503'}}>videos</span>
 
         </Typography>
-          <Videos videos={[videos]}/>
+          <Videos videos={videos}/>
       </Box>
     </Stack>
   )
