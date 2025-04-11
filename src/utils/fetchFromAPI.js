@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { REACT_APP_RAPID_API_KEY } from './config';
 
 
-const BASE_URL = 'https://youtube-v31.p.rapidapi.com';
+
+export const BASE_URL = 'https://youtube-v31.p.rapidapi.com';
 
 
 const options = {
@@ -11,12 +13,12 @@ const options = {
        },
     headers:{
         'Content-Type':'application/json',
-            'X-RapidAPI-Key': process.env.REACT_APP_RAPID_API_KEY, // Ensure this is correctly set in your .env file
+            'X-RapidAPI-Key': REACT_APP_RAPID_API_KEY, // Ensure this is correctly set in your .env file
             'X-RapidAPI-Host': 'youtube-v31.p.rapidapi.com',
           
     },
 };
-console.log('API key:',process.env.REACT_APP_RAPID_API_KEY);
+console.log('API key:',REACT_APP_RAPID_API_KEY);
 
 export const fetchFromAPI = async (url)=>{
     try{

@@ -1,27 +1,17 @@
 import {useState,useEffect} from 'react'
 import {Box,Stack,Typography} from '@mui/material';
 import { fetchFromAPI } from '../utils/fetchFromAPI';
-import {Sidebar,Videos} from "./";
- const Feed = () => {
+import {Videos,Sidebar} from "./";
+ 
 
-const [selectedCategory,setSelectedCategory] = useState('New');
+
+const Feed = () => {
+const [selectedCategory,setSelectedCategory] = useState("New");
 const [videos,setVideos]=useState([]);
 
-
-  useEffect(()=>{
-
-    const fetchVideos = async()=>{
-      try{
-        const data = await fetchFromAPI(`search?part=snippet&q=${selectedCategory}`);
-        setVideos(data.items);
-        console.log(data);
-      }catch(error){
-        console.error('Error fetchoing videos:',error);
-      }
-    };
-
-   fetchVideos();
-    },[selectedCategory]);
+useEffect(()=>{
+fetchFromAPI(`search?part=snippet&q = ${selectedCategory}`).then((data)=>setVideos(data.items))},[selectedCategory]);
+   
   return (
     <Stack sx={{flexDirection:{sx:"column",md:"row" }}}>
       <Box sx={{height:{sx:'auto',md:'92vh'},borderRight:'1px solid #3d3d3d',px:{sx:0,md:2}}}>
