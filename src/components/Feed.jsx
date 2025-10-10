@@ -8,7 +8,7 @@ const [selectedCategory,setSelectedCategory]=useState('New');
 const [videos,setVideos]=useState([]);
 useEffect(()=>{
 
-fetchFromAPI(`search?part=snippet&q={selectedCategory}`).then((data)=>setVideos(data.items))
+fetchFromAPI(`search?part=snippet&q=${selectedCategory}`).then((data)=>setVideos(data.items))
 },[selectedCategory]);
 
 
