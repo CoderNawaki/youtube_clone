@@ -20,7 +20,18 @@ import { fetchFromAPI } from "../utils/fetchFromAPI";
   },[id])
 
   return (
-    <div>{id}</div>
+    <Box minHeight="95vh">
+      <Box>
+        <div style={{
+          background:'linear-Gradient(90deg,rgba(0,238,247,1) 0%,rgba(0,212,255,1)100%,rgba(0,212,255,1)100%)',
+          zIndex:10,height:'300px'
+        }}>
+
+          <ChannelCard channelDetail={channelDetail} />
+
+        </div>
+      </Box>
+    </Box>
   )
 }
 
