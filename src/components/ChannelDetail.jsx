@@ -32,7 +32,7 @@ import { fetchFromAPI } from "../utils/fetchFromAPI";
       </Box>
       <Box display="flex" p="2">
         <Box  sx={{mr:{sm:'100px'}}} />
-            <Videos vidoes={videos} />
+            <Videos videos={videos} />
         
       </Box>
     </Box>
