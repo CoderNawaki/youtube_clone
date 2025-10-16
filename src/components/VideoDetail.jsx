@@ -7,7 +7,7 @@ import ReactPlayer from 'react-player';
 import { Typography,Box,Stack} from '@mui/material';
 
 import { CheckCircle } from '@mui/icons-material';
-import {Video} from './';
+import {Videos} from './';
 
 import { fetchFromAPI } from '../utils/fetchFromAPI';
 
@@ -32,8 +32,10 @@ const {snippet:{title,channelId,channelTitle},statistics:{viewCount,likeCount}}=
 
   return (
     <Box minHeight="95vh">
-      <Stack>
-        <Box>
+      <Stack direction={{xs:'column', md:'row'}}>
+        <Box flex={1}>
+          <Box sx={{widht:'100%',position:'sticky',top:'86px'}}>
+
           <ReactPlayer url ={`https://www.youtube.com/watch/?v=${id}`}
                       className="react-player" controls />
 
@@ -59,8 +61,13 @@ const {snippet:{title,channelId,channelTitle},statistics:{viewCount,likeCount}}=
               </Typography>
             </Stack>
           </Stack>
+         </Box>
+        </Box>
+        <Box px={2} py={{md:1, xs:5}} justifyContent="center" alignItems="center">
+          <Videos video={videos} direction="column"/>
         </Box>
       </Stack>
+
     </Box>
   )
 }
