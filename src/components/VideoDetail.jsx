@@ -7,27 +7,67 @@ import ReactPlayer from 'react-player';
 import { Typography, Box, Stack } from '@mui/material';
 
 import { CheckCircle } from '@mui/icons-material';
-import { Videos } from './';
+import { Videos, LoadingState, ErrorState } from './';
 
-import { fetchFromAPI } from '../utils/fetchFromAPI';
+import { fetchRelatedVideos, fetchVideoDetails } from '../utils/fetchFromAPI';
 
 const VideoDetail = () => {
   const [videoDetail, setVideoDetail] = useState(null);
-  const [videos, setVideos] = useState(null);
+  const [videos, setVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [retryCount, setRetryCount] = useState(0);
   const { id } = useParams();
 
   useEffect(() => {
-    fetchFromAPI(`videos?part=snippet,statistics&id=${id}`).then((data) =>
-      setVideoDetail(data.items[0])
-    );
+    let isMounted = true;
 
-    fetchFromAPI(`search?part=snippet&relatedToVideoId=${id}&type=video`).then(
-      (data) => setVideos(data.items)
-    );
-  }, [id]);
+    const loadVideo = async () => {
+      setIsLoading(true);
+      setErrorMessage('');
 
-  if (!videoDetail?.snippet) {
-    return 'Loading.....';
+      try {
+        const [nextVideoDetail, nextVideos] = await Promise.all([
+          fetchVideoDetails(id),
+          fetchRelatedVideos(id),
+        ]);
+
+        if (isMounted) {
+          setVideoDetail(nextVideoDetail);
+          setVideos(nextVideos);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setVideoDetail(null);
+          setVideos([]);
+          setErrorMessage(error.message);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadVideo();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, retryCount]);
+
+  if (isLoading) {
+    return <LoadingState message="Loading video details..." />;
+  }
+
+  if (errorMessage || !videoDetail?.snippet) {
+    return (
+      <ErrorState
+        title="Unable to load video"
+        message={errorMessage || 'The requested video could not be found.'}
+        onRetry={() => setRetryCount((current) => current + 1)}
+      />
+    );
   }
 
   const {
@@ -39,7 +79,7 @@ const VideoDetail = () => {
     <Box minHeight="95vh">
       <Stack direction={{ xs: 'column', md: 'row' }}>
         <Box flex={1}>
-          <Box sx={{ widht: '100%', position: 'sticky', top: '86px' }}>
+          <Box sx={{ width: '100%', position: 'sticky', top: '86px' }}>
             <ReactPlayer
               url={`https://www.youtube.com/watch/?v=${id}`}
               className="react-player"
@@ -59,7 +99,7 @@ const VideoDetail = () => {
             >
               <Link to={`/channel/${channelId}`}>
                 <Typography
-                  variant=""
+                  variant="subtitle1"
                   sx={{ sm: 'subtitle1', md: 'h6', color: '#fff' }}
                 >
                   {channelTitle}
