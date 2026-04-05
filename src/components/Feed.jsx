@@ -1,16 +1,47 @@
 import { useState, useEffect } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import { fetchFromAPI } from '../utils/fetchFromAPI';
-import { Videos, Sidebar } from './';
+import { fetchSearchVideos } from '../utils/fetchFromAPI';
+import { Videos, Sidebar, LoadingState, ErrorState } from './';
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState('New');
   const [videos, setVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [retryCount, setRetryCount] = useState(0);
+
   useEffect(() => {
-    fetchFromAPI(`search?part=snippet&q=${selectedCategory}`).then((data) =>
-      setVideos(data.items)
-    );
-  }, [selectedCategory]);
+    let isMounted = true;
+
+    const loadVideos = async () => {
+      setIsLoading(true);
+      setErrorMessage('');
+
+      try {
+        const nextVideos = await fetchSearchVideos(selectedCategory);
+
+        if (isMounted) {
+          setVideos(nextVideos);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setVideos([]);
+          setErrorMessage(error.message);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadVideos();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCategory, retryCount]);
+
   return (
     <Stack sx={{ flexDirection: { sx: 'column', md: 'row' } }}>
       <Box
@@ -41,7 +72,17 @@ const Feed = () => {
         >
           {selectedCategory} <span style={{ color: '#F31503' }}>videos</span>
         </Typography>
-        <Videos videos={videos} />
+        {isLoading ? (
+          <LoadingState message={`Loading ${selectedCategory} videos...`} />
+        ) : errorMessage ? (
+          <ErrorState
+            title="Unable to load videos"
+            message={errorMessage}
+            onRetry={() => setRetryCount((current) => current + 1)}
+          />
+        ) : (
+          <Videos videos={videos} />
+        )}
       </Box>
     </Stack>
   );

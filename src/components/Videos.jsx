@@ -1,9 +1,14 @@
 import { Stack, Box } from '@mui/material';
 
-import { VideoCard, ChannelCard } from './';
+import { VideoCard, ChannelCard, EmptyState } from './';
 const Videos = ({ videos, direction }) => {
   if (!videos?.length) {
-    return 'Loading...';
+    return (
+      <EmptyState
+        title="No videos available"
+        message="Try another category or search term."
+      />
+    );
   }
 
   return (
