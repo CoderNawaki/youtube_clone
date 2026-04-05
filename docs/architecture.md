@@ -30,7 +30,11 @@ This project is a React single-page application that renders a YouTube-style bro
 
 ```text
 src/
-  components/   Route components and reusable UI pieces
+  components/
+    layout/     App chrome and navigation pieces
+    routes/     Route-level page components
+    shared/     Reusable UI states and shared display helpers
+    video/      Video/channel card and list presentation
   hooks/        Shared React hooks for async/resource logic
   tests/        Unit/integration test files, mocks, and fixtures
   utils/        API module and shared constants
@@ -50,3 +54,5 @@ src/
 ## Current Direction
 
 Phase 4 focuses on maintainability rather than visual changes. The immediate architectural goal is to reduce repeated async logic, keep data access centralized, and make future feature-oriented reorganization easier without forcing a disruptive rewrite now.
+
+Key decisions are also recorded in `docs/adr/` so structural changes remain explainable as the codebase evolves.
