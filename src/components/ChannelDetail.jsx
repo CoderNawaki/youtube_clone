@@ -1,54 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Videos, ChannelCard, LoadingState, ErrorState } from './';
+import { useAsyncResource } from '../hooks';
 import { fetchChannelDetails, fetchChannelVideos } from '../utils/fetchFromAPI';
 
 const ChannelDetail = () => {
-  const [channelDetail, setChannelDetail] = useState(null);
-  const [videos, setVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [retryCount, setRetryCount] = useState(0);
-
   const { id } = useParams();
+  const loadChannel = useCallback(async () => {
+    const [channelDetail, videos] = await Promise.all([
+      fetchChannelDetails(id),
+      fetchChannelVideos(id),
+    ]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadChannel = async () => {
-      setIsLoading(true);
-      setErrorMessage('');
-
-      try {
-        const [nextChannelDetail, nextVideos] = await Promise.all([
-          fetchChannelDetails(id),
-          fetchChannelVideos(id),
-        ]);
-
-        if (isMounted) {
-          setChannelDetail(nextChannelDetail);
-          setVideos(nextVideos);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setChannelDetail(null);
-          setVideos([]);
-          setErrorMessage(error.message);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
+    return {
+      channelDetail,
+      videos,
     };
+  }, [id]);
 
-    loadChannel();
+  const {
+    data: channelData,
+    isLoading,
+    errorMessage,
+    reload,
+  } = useAsyncResource({
+    loader: loadChannel,
+    initialData: {
+      channelDetail: null,
+      videos: [],
+    },
+    fallbackErrorMessage: 'Unable to load channel.',
+  });
 
-    return () => {
-      isMounted = false;
-    };
-  }, [id, retryCount]);
+  const { channelDetail, videos } = channelData;
 
   if (isLoading) {
     return <LoadingState message="Loading channel details..." />;
@@ -59,7 +44,7 @@ const ChannelDetail = () => {
       <ErrorState
         title="Unable to load channel"
         message={errorMessage}
-        onRetry={() => setRetryCount((current) => current + 1)}
+        onRetry={reload}
       />
     );
   }

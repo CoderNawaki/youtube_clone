@@ -1,47 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useCallback } from 'react';
 import { Box, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../utils/fetchFromAPI';
+import { useAsyncResource } from '../hooks';
 import { Videos, LoadingState, ErrorState } from './';
 import { useParams } from 'react-router-dom';
 
 const SearchFeed = () => {
-  const [videos, setVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [retryCount, setRetryCount] = useState(0);
   const { searchTerm } = useParams();
+  const loadVideos = useCallback(() => {
+    return fetchSearchVideos(searchTerm);
+  }, [searchTerm]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadVideos = async () => {
-      setIsLoading(true);
-      setErrorMessage('');
-
-      try {
-        const nextVideos = await fetchSearchVideos(searchTerm);
-
-        if (isMounted) {
-          setVideos(nextVideos);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setVideos([]);
-          setErrorMessage(error.message);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadVideos();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [searchTerm, retryCount]);
+  const {
+    data: videos,
+    isLoading,
+    errorMessage,
+    reload,
+  } = useAsyncResource({
+    loader: loadVideos,
+    initialData: [],
+    fallbackErrorMessage: 'Search failed.',
+  });
 
   return (
     <Box p={2} sx={{ overflowY: 'auto', height: '90vh', flex: 2 }}>
@@ -56,7 +35,7 @@ const SearchFeed = () => {
         <ErrorState
           title="Search failed"
           message={errorMessage}
-          onRetry={() => setRetryCount((current) => current + 1)}
+          onRetry={reload}
         />
       ) : (
         <Videos videos={videos} />

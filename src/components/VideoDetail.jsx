@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-
+import { useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ReactPlayer from 'react-player';
@@ -9,52 +8,38 @@ import { Typography, Box, Stack } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
 import { Videos, LoadingState, ErrorState } from './';
 
+import { useAsyncResource } from '../hooks';
 import { fetchRelatedVideos, fetchVideoDetails } from '../utils/fetchFromAPI';
 
 const VideoDetail = () => {
-  const [videoDetail, setVideoDetail] = useState(null);
-  const [videos, setVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [retryCount, setRetryCount] = useState(0);
   const { id } = useParams();
+  const loadVideo = useCallback(async () => {
+    const [videoDetail, videos] = await Promise.all([
+      fetchVideoDetails(id),
+      fetchRelatedVideos(id),
+    ]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadVideo = async () => {
-      setIsLoading(true);
-      setErrorMessage('');
-
-      try {
-        const [nextVideoDetail, nextVideos] = await Promise.all([
-          fetchVideoDetails(id),
-          fetchRelatedVideos(id),
-        ]);
-
-        if (isMounted) {
-          setVideoDetail(nextVideoDetail);
-          setVideos(nextVideos);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setVideoDetail(null);
-          setVideos([]);
-          setErrorMessage(error.message);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
+    return {
+      videoDetail,
+      videos,
     };
+  }, [id]);
 
-    loadVideo();
+  const {
+    data: videoData,
+    isLoading,
+    errorMessage,
+    reload,
+  } = useAsyncResource({
+    loader: loadVideo,
+    initialData: {
+      videoDetail: null,
+      videos: [],
+    },
+    fallbackErrorMessage: 'Unable to load video.',
+  });
 
-    return () => {
-      isMounted = false;
-    };
-  }, [id, retryCount]);
+  const { videoDetail, videos } = videoData;
 
   if (isLoading) {
     return <LoadingState message="Loading video details..." />;
@@ -65,7 +50,7 @@ const VideoDetail = () => {
       <ErrorState
         title="Unable to load video"
         message={errorMessage || 'The requested video could not be found.'}
-        onRetry={() => setRetryCount((current) => current + 1)}
+        onRetry={reload}
       />
     );
   }
