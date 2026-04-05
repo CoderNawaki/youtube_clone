@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import { fetchSearchVideos } from '../utils/fetchFromAPI';
-import { useAsyncResource } from '../hooks';
-import { Videos, Sidebar, LoadingState, ErrorState } from './';
+import { fetchSearchVideos } from '../../utils/fetchFromAPI';
+import { useAsyncResource } from '../../hooks';
+import { Sidebar, LoadingState, ErrorState, Videos } from '../';
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState('New');

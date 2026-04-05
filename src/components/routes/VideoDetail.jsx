@@ -6,10 +6,13 @@ import ReactPlayer from 'react-player';
 import { Typography, Box, Stack } from '@mui/material';
 
 import { CheckCircle } from '@mui/icons-material';
-import { Videos, LoadingState, ErrorState } from './';
+import { Videos, LoadingState, ErrorState } from '../';
 
-import { useAsyncResource } from '../hooks';
-import { fetchRelatedVideos, fetchVideoDetails } from '../utils/fetchFromAPI';
+import { useAsyncResource } from '../../hooks';
+import {
+  fetchRelatedVideos,
+  fetchVideoDetails,
+} from '../../utils/fetchFromAPI';
 
 const VideoDetail = () => {
   const { id } = useParams();

@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SearchBar from '../../components/SearchBar';
+import SearchBar from '../../components/layout/SearchBar';
 import { renderWithRouter } from '../test-utils';
 
 const mockedNavigate = jest.fn();
