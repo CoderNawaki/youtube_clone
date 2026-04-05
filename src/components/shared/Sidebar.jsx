@@ -3,6 +3,8 @@ import { categories } from '../../utils/constants';
 
 const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
   <Stack
+    component="nav"
+    aria-label="Video categories"
     direction="row"
     sx={{
       overflow: 'auto',
@@ -13,6 +15,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
     {categories.map((category) => (
       <button
         className="category-btn"
+        aria-pressed={category.name === selectedCategory}
         onClick={() => setSelectedCategory(category.name)}
         style={{
           background: category.name === selectedCategory && '#FC1503',
@@ -21,6 +24,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
         key={category.name}
       >
         <span
+          aria-hidden="true"
           style={{
             color: category.name === selectedCategory ? 'white' : 'red',
             marginRight: '15px',
@@ -35,7 +39,6 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
         </span>
       </button>
     ))}
-    ;
   </Stack>
 );
 

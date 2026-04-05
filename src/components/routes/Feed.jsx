@@ -42,8 +42,13 @@ const Feed = () => {
           Copyright 2025 youtube media
         </Typography>
       </Box>
-      <Box p={2} sx={{ overflowY: 'auto', height: '90vh', flex: 2 }}>
+      <Box
+        component="main"
+        p={2}
+        sx={{ overflowY: 'auto', height: '90vh', flex: 2 }}
+      >
         <Typography
+          component="h1"
           variant="h4"
           fontWeight="bold"
           mb={2}

@@ -7,6 +7,7 @@ const ErrorState = ({
 }) => {
   return (
     <Box
+      role="alert"
       minHeight="40vh"
       display="flex"
       flexDirection="column"

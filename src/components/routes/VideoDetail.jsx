@@ -64,7 +64,7 @@ const VideoDetail = () => {
   } = videoDetail;
 
   return (
-    <Box minHeight="95vh">
+    <Box component="main" minHeight="95vh">
       <Stack direction={{ xs: 'column', md: 'row' }}>
         <Box flex={1}>
           <Box sx={{ width: '100%', position: 'sticky', top: '86px' }}>
@@ -92,6 +92,7 @@ const VideoDetail = () => {
                 >
                   {channelTitle}
                   <CheckCircle
+                    aria-hidden="true"
                     sx={{ fontSize: '12px', color: 'gray', ml: '5px' }}
                   />
                 </Typography>

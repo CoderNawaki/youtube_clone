@@ -5,9 +5,22 @@ body {
   box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 a {
   text-decoration: none;
   color: black;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #ffb347;
+  outline-offset: 2px;
 }
 
 ::-webkit-scrollbar {
@@ -43,6 +56,8 @@ a {
   border: none;
   outline: none;
   width: 350px;
+  background: transparent;
+  color: #111;
 }
 
 .category-btn {
