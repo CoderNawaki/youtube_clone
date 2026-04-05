@@ -2,17 +2,17 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 
-import Feed from '../../components/Feed';
+import Feed from '../../components/routes/Feed';
 import { renderWithRouter } from '../test-utils';
 import { server } from '../mocks/server';
 
-jest.mock('../../components/VideoCard', () => {
+jest.mock('../../components/video/VideoCard', () => {
   return function MockVideoCard({ video }) {
     return <div>{video.snippet.title}</div>;
   };
 });
 
-jest.mock('../../components/ChannelCard', () => {
+jest.mock('../../components/video/ChannelCard', () => {
   return function MockChannelCard({ channelDetail }) {
     return <div>{channelDetail.snippet.title}</div>;
   };

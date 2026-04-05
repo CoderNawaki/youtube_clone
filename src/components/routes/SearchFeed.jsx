@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
-import { Box, Typography } from '@mui/material';
-import { fetchSearchVideos } from '../utils/fetchFromAPI';
-import { useAsyncResource } from '../hooks';
-import { Videos, LoadingState, ErrorState } from './';
 import { useParams } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import { fetchSearchVideos } from '../../utils/fetchFromAPI';
+import { useAsyncResource } from '../../hooks';
+import { Videos, LoadingState, ErrorState } from '../';
 
 const SearchFeed = () => {
   const { searchTerm } = useParams();

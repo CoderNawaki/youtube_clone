@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { Videos, ChannelCard, LoadingState, ErrorState } from './';
-import { useAsyncResource } from '../hooks';
-import { fetchChannelDetails, fetchChannelVideos } from '../utils/fetchFromAPI';
+import { Videos, ChannelCard, LoadingState, ErrorState } from '../';
+import { useAsyncResource } from '../../hooks';
+import {
+  fetchChannelDetails,
+  fetchChannelVideos,
+} from '../../utils/fetchFromAPI';
 
 const ChannelDetail = () => {
   const { id } = useParams();

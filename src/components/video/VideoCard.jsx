@@ -8,7 +8,7 @@ import {
   demoVideoTitle,
   demoChannelUrl,
   demoChannelTitle,
-} from '../utils/constants';
+} from '../../utils/constants';
 
 const VideoCard = ({
   video: {
