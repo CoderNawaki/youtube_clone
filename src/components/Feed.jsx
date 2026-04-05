@@ -1,46 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../utils/fetchFromAPI';
+import { useAsyncResource } from '../hooks';
 import { Videos, Sidebar, LoadingState, ErrorState } from './';
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState('New');
-  const [videos, setVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [retryCount, setRetryCount] = useState(0);
+  const loadVideos = useCallback(() => {
+    return fetchSearchVideos(selectedCategory);
+  }, [selectedCategory]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadVideos = async () => {
-      setIsLoading(true);
-      setErrorMessage('');
-
-      try {
-        const nextVideos = await fetchSearchVideos(selectedCategory);
-
-        if (isMounted) {
-          setVideos(nextVideos);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setVideos([]);
-          setErrorMessage(error.message);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadVideos();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [selectedCategory, retryCount]);
+  const {
+    data: videos,
+    isLoading,
+    errorMessage,
+    reload,
+  } = useAsyncResource({
+    loader: loadVideos,
+    initialData: [],
+    fallbackErrorMessage: 'Unable to load videos.',
+  });
 
   return (
     <Stack sx={{ flexDirection: { sx: 'column', md: 'row' } }}>
@@ -78,7 +57,7 @@ const Feed = () => {
           <ErrorState
             title="Unable to load videos"
             message={errorMessage}
-            onRetry={() => setRetryCount((current) => current + 1)}
+            onRetry={reload}
           />
         ) : (
           <Videos videos={videos} />
