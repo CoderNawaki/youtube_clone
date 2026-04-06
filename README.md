@@ -1,70 +1,102 @@
-# Getting Started with Create React App
+# YouTube Clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based YouTube-style browsing app backed by the RapidAPI YouTube endpoint.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- homepage feed by category
+- search results
+- video detail pages with related videos
+- channel detail pages
+- unit/integration tests with React Testing Library
+- API mocking with MSW
+- Playwright smoke coverage for critical browser flows
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js 18+
+- npm 9+
+- a RapidAPI key for `youtube-v31.p.rapidapi.com`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Environment Variables
 
-### `npm test`
+Create a local `.env` file from `.env.example`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+cp .env.example .env
+```
 
-### `npm run build`
+Required variable:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `REACT_APP_RAPID_API_KEY`: RapidAPI key used for YouTube data requests
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Local Development
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Install dependencies:
 
-### `npm run eject`
+```bash
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Start the app:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The app runs at `http://localhost:3000`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Scripts
 
-## Learn More
+- `npm start`: run the development server
+- `npm run build`: create a production build
+- `npm test`: run the Jest/RTL test suite
+- `npm run lint`: run ESLint
+- `npm run lint:fix`: run ESLint with autofix
+- `npm run format`: run Prettier
+- `npm run format:check`: verify formatting
+- `npm run e2e`: run Playwright smoke tests
+- `npm run e2e:headed`: run Playwright smoke tests with a visible browser
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Testing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Run unit/integration tests:
 
-### Code Splitting
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Run end-to-end smoke tests:
 
-### Analyzing the Bundle Size
+```bash
+npm run e2e
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Deployment
 
-### Making a Progressive Web App
+Phase 6 deployment guidance lives in:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- `docs/deployment.md`
+- `docs/environment-strategy.md`
+- `docs/observability.md`
+- `docs/maintenance.md`
 
-### Advanced Configuration
+## Architecture
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Architecture overview:
 
-### Deployment
+- `docs/architecture.md`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Architecture decision records:
 
-### `npm run build` fails to minify
+- `docs/adr/`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Troubleshooting
+
+- If API calls fail immediately, verify `REACT_APP_RAPID_API_KEY` is set in `.env`.
+- If the app reports rate limits or authorization failures, check RapidAPI quota and key status.
+- If Playwright cannot run, install the browser runtime with:
+
+```bash
+npx playwright install chromium
+```
