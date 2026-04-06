@@ -6,6 +6,8 @@ import SearchBar from './SearchBar';
 
 const Navbar = () => (
   <Stack
+    component="header"
+    role="banner"
     direction="row"
     alignItems="center"
     p={2}
@@ -16,7 +18,11 @@ const Navbar = () => (
       justifyContent: 'space-between',
     }}
   >
-    <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+    <Link
+      to="/"
+      aria-label="Go to homepage"
+      style={{ display: 'flex', alignItems: 'center' }}
+    >
       <img src={logo} alt="logo" height={45} />
     </Link>
 

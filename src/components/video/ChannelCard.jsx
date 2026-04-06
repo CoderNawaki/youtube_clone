@@ -22,7 +22,10 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
         marginTop,
       }}
     >
-      <Link to={`/channel/${channelId}`}>
+      <Link
+        to={`/channel/${channelId}`}
+        aria-label={`Open channel ${channelDetail?.snippet?.title || 'channel'}`}
+      >
         <CardContent
           sx={{
             display: 'flex',
@@ -48,7 +51,10 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
           />
           <Typography variant="h6">
             {channelDetail?.snippet?.title}
-            <CheckCircle sx={{ fontSize: 12, color: 'gray', ml: '5px' }} />
+            <CheckCircle
+              aria-hidden="true"
+              sx={{ fontSize: 12, color: 'gray', ml: '5px' }}
+            />
           </Typography>
           {channelDetail?.statistics?.subscriberCount && (
             <Typography>

@@ -6,6 +6,7 @@ const EmptyState = ({
 }) => {
   return (
     <Box
+      aria-live="polite"
       minHeight="30vh"
       display="flex"
       flexDirection="column"

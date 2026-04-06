@@ -53,7 +53,7 @@ const ChannelDetail = () => {
   }
 
   return (
-    <Box minHeight="95vh">
+    <Box component="main" minHeight="95vh">
       <Box>
         <div
           style={{
