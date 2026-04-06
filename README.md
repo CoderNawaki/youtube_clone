@@ -81,6 +81,10 @@ Phase 6 deployment guidance lives in:
 - `docs/observability.md`
 - `docs/maintenance.md`
 
+Current recommended host:
+
+- Netlify
+
 ## Architecture
 
 Architecture overview:
@@ -95,6 +99,7 @@ Architecture decision records:
 
 - If API calls fail immediately, verify `REACT_APP_RAPID_API_KEY` is set in `.env`.
 - If the app reports rate limits or authorization failures, check RapidAPI quota and key status.
+- If a Netlify deploy succeeds but the app shows API failures, verify `REACT_APP_RAPID_API_KEY` is configured in Netlify site environment variables before the build runs.
 - If Playwright cannot run, install the browser runtime with:
 
 ```bash
