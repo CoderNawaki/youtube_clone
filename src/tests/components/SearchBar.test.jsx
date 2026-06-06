@@ -1,13 +1,14 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 
 import SearchBar from '../../components/layout/SearchBar';
 import { renderWithRouter } from '../test-utils';
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => {
-  const actual = jest.requireActual('react-router-dom');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
 
   return {
     ...actual,
