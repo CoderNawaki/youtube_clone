@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-
+import { vi } from 'vitest';
 import AppErrorBoundary from '../../components/shared/AppErrorBoundary';
 
 const ThrowingComponent = () => {
@@ -10,7 +10,7 @@ describe('AppErrorBoundary', () => {
   let consoleErrorSpy;
 
   beforeEach(() => {
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {

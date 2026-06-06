@@ -1,21 +1,26 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 
 import App from '../App';
 
-jest.mock('../components/layout/Navbar', () => () => <div>Navbar</div>);
-jest.mock('../components/shared/LoadingState', () => () => (
-  <div>Loading page...</div>
-));
-jest.mock('../components/routes/Feed', () => () => <div>Feed page</div>);
-jest.mock('../components/routes/VideoDetail', () => () => (
-  <div>Video detail page</div>
-));
-jest.mock('../components/routes/ChannelDetail', () => () => (
-  <div>Channel detail page</div>
-));
-jest.mock('../components/routes/SearchFeed', () => () => (
-  <div>Search feed page</div>
-));
+vi.mock('../components/layout/Navbar', () => ({
+  default: () => <div>Navbar</div>,
+}));
+vi.mock('../components/shared/LoadingState', () => ({
+  default: () => <div>Loading page...</div>,
+}));
+vi.mock('../components/routes/Feed', () => ({
+  default: () => <div>Feed page</div>,
+}));
+vi.mock('../components/routes/VideoDetail', () => ({
+  default: () => <div>Video detail page</div>,
+}));
+vi.mock('../components/routes/ChannelDetail', () => ({
+  default: () => <div>Channel detail page</div>,
+}));
+vi.mock('../components/routes/SearchFeed', () => ({
+  default: () => <div>Search feed page</div>,
+}));
 
 const mockLocation = (pathname) => {
   window.history.pushState({}, 'Test page', pathname);
