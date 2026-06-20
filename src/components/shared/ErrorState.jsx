@@ -17,17 +17,17 @@ const ErrorState = ({
       px={3}
       textAlign="center"
     >
-      <Typography color="#fff" variant="h5" fontWeight="bold">
+      <Typography color="text.primary" variant="h5" fontWeight="bold">
         {title}
       </Typography>
-      <Typography color="gray" variant="body1">
+      <Typography color="text.secondary" variant="body1">
         {message}
       </Typography>
       {onRetry ? (
         <Button
           variant="contained"
           onClick={onRetry}
-          sx={{ bgcolor: '#f31503' }}
+          sx={{ bgcolor: 'primary.main' }}
         >
           Try again
         </Button>

@@ -19,14 +19,26 @@ const LoadingState = ({ message = 'Loading content...' }) => {
       gap={2}
       px={3}
     >
-      <CircularProgress sx={{ color: '#f31503' }} />
+      <CircularProgress sx={{ color: 'primary.main' }} />
       <Typography color="#fff" variant="body1">
         {message}
       </Typography>
       <Stack width="100%" maxWidth="420px" spacing={1}>
-        <Skeleton variant="rounded" height={20} sx={{ bgcolor: '#2d2d2d' }} />
-        <Skeleton variant="rounded" height={20} sx={{ bgcolor: '#242424' }} />
-        <Skeleton variant="rounded" height={120} sx={{ bgcolor: '#1d1d1d' }} />
+        <Skeleton
+          variant="rounded"
+          height={20}
+          sx={{ bgcolor: 'custom.skeletonLight' }}
+        />
+        <Skeleton
+          variant="rounded"
+          height={20}
+          sx={{ bgcolor: 'custom.skeletonMid' }}
+        />
+        <Skeleton
+          variant="rounded"
+          height={120}
+          sx={{ bgcolor: 'custom.skeletonDark' }}
+        />
       </Stack>
     </Box>
   );

@@ -33,10 +33,13 @@ const SearchFeed = () => {
         variant="h4"
         fontWeight="bold"
         mb={2}
-        sx={{ color: 'white' }}
+        sx={{ color: 'text.primary' }}
       >
         Search Results for:
-        <span style={{ color: '#F31503' }}>{searchTerm}</span> Videos
+        <Box component="span" sx={{ color: 'primary.main' }}>
+          {searchTerm}
+        </Box>{' '}
+        Videos
       </Typography>
 
       {isLoading ? (

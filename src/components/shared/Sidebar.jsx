@@ -18,7 +18,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
         aria-pressed={category.name === selectedCategory}
         onClick={() => setSelectedCategory(category.name)}
         style={{
-          background: category.name === selectedCategory && '#FC1503',
+          background: category.name === selectedCategory && '#F31503',
           color: 'white',
         }}
         key={category.name}
@@ -26,7 +26,7 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
         <span
           aria-hidden="true"
           style={{
-            color: category.name === selectedCategory ? 'white' : 'red',
+            color: category.name === selectedCategory ? 'white' : '#F31503',
             marginRight: '15px',
           }}
         >
