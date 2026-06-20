@@ -1,17 +1,20 @@
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { codingCategoryVideos, newCategoryVideos } from '../fixtures/youtube';
 
 const BASE_URL = 'https://youtube-v31.p.rapidapi.com';
 
 export const handlers = [
-  rest.get(`${BASE_URL}/search`, (req, res, ctx) => {
-    const query = req.url.searchParams.get('q');
+  http.get(`${BASE_URL}/search`, ({ request }) => {
+    const query = new URL(request.url).searchParams.get('q');
 
     if (query === 'Coding') {
-      return res(ctx.status(200), ctx.json({ items: codingCategoryVideos }));
+      return HttpResponse.json(
+        { items: codingCategoryVideos },
+        { status: 200 }
+      );
     }
 
-    return res(ctx.status(200), ctx.json({ items: newCategoryVideos }));
+    return HttpResponse.json({ items: newCategoryVideos }, { status: 200 });
   }),
 ];
