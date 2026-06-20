@@ -16,10 +16,10 @@ const EmptyState = ({
       px={3}
       textAlign="center"
     >
-      <Typography color="#fff" variant="h6" fontWeight="bold">
+      <Typography color="text.primary" variant="h6" fontWeight="bold">
         {title}
       </Typography>
-      <Typography color="gray" variant="body2">
+      <Typography color="text.secondary" variant="body2">
         {message}
       </Typography>
     </Box>

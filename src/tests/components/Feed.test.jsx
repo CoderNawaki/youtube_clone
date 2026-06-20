@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { vi } from 'vitest';
 
 import Feed from '../../components/routes/Feed';
@@ -52,20 +52,17 @@ describe('Feed', () => {
     let shouldFail = true;
 
     server.use(
-      rest.get('https://youtube-v31.p.rapidapi.com/search', (req, res, ctx) => {
+      http.get('https://youtube-v31.p.rapidapi.com/search', ({ request }) => {
         if (shouldFail) {
           shouldFail = false;
-          return res(
-            ctx.status(429),
-            ctx.json({
-              message: 'Rate limit reached. Please try again later.',
-            })
+          return HttpResponse.json(
+            { message: 'Rate limit reached. Please try again later.' },
+            { status: 429 }
           );
         }
 
-        return res(
-          ctx.status(200),
-          ctx.json({
+        return HttpResponse.json(
+          {
             items: [
               {
                 id: { videoId: 'video-1' },
@@ -81,7 +78,8 @@ describe('Feed', () => {
                 },
               },
             ],
-          })
+          },
+          { status: 200 }
         );
       })
     );

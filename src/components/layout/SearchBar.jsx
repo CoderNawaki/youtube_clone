@@ -25,7 +25,8 @@ const SearchBar = () => {
       aria-label="Search videos"
       sx={{
         borderRadius: 20,
-        border: '1px solid #e3e3e3',
+        border: '1px solid',
+        borderColor: 'custom.searchBorder',
         pl: 2,
         boxShadow: 'none',
         mr: { sm: 5 },
@@ -41,7 +42,7 @@ const SearchBar = () => {
       <IconButton
         type="submit"
         aria-label="Submit search"
-        sx={{ p: '10px', color: 'red' }}
+        sx={{ p: '10px', color: 'primary.main' }}
       >
         <Search />
       </IconButton>

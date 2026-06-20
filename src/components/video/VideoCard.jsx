@@ -34,12 +34,16 @@ const VideoCard = ({
           sx={{ width: { xs: '100%', sm: '358px' }, height: 180 }}
         />
       </Link>
-      <CardContent sx={{ backgroundColor: '#1e1e1e', height: '106px' }}>
+      <CardContent sx={{ bgcolor: 'background.paper', height: '106px' }}>
         <Link
           to={videoId ? `/video/${videoId}` : demoVideoUrl}
           aria-label={`Open video ${snippet?.title || demoVideoTitle}`}
         >
-          <Typography variant="subtitle1" fontWeight="bold" color="#fff">
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            color="text.primary"
+          >
             {snippet?.title.slice(0, 60) || demoVideoTitle.slice(0, 60)}
           </Typography>
         </Link>
@@ -56,7 +60,7 @@ const VideoCard = ({
           </Typography>
           <CheckCircle
             aria-hidden="true"
-            sx={{ fontSize: 12, color: 'gray', ml: '5px' }}
+            sx={{ fontSize: 12, color: 'custom.verifiedBadge', ml: '5px' }}
           />
         </Link>
       </CardContent>

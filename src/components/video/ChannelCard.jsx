@@ -32,7 +32,7 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
             flexDirection: 'column',
             justifyContent: 'center',
             textAlign: 'center',
-            color: '#fff',
+            color: 'text.primary',
           }}
         >
           <CardMedia
@@ -46,14 +46,15 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
               height: '180px',
               width: '180px',
               mb: 2,
-              border: '1px solid #e3e3e3',
+              border: '1px solid',
+              borderColor: 'custom.channelCardBorder',
             }}
           />
           <Typography variant="h6">
             {channelDetail?.snippet?.title}
             <CheckCircle
               aria-hidden="true"
-              sx={{ fontSize: 12, color: 'gray', ml: '5px' }}
+              sx={{ fontSize: 12, color: 'custom.verifiedBadge', ml: '5px' }}
             />
           </Typography>
           {channelDetail?.statistics?.subscriberCount && (

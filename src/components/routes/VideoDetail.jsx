@@ -74,26 +74,35 @@ const VideoDetail = () => {
               controls
             />
 
-            <Typography color="#fff" variant="h5" fontWeight="bold" p={2}>
+            <Typography
+              color="text.primary"
+              variant="h5"
+              fontWeight="bold"
+              p={2}
+            >
               {title}
             </Typography>
 
             <Stack
               direction="row"
               justifyContent="space-between"
-              sx={{ color: '#fff' }}
+              sx={{ color: 'text.primary' }}
               py={1}
               px={2}
             >
               <Link to={`/channel/${channelId}`}>
                 <Typography
                   variant="subtitle1"
-                  sx={{ sm: 'subtitle1', md: 'h6', color: '#fff' }}
+                  sx={{ sm: 'subtitle1', md: 'h6', color: 'text.primary' }}
                 >
                   {channelTitle}
                   <CheckCircle
                     aria-hidden="true"
-                    sx={{ fontSize: '12px', color: 'gray', ml: '5px' }}
+                    sx={{
+                      fontSize: '12px',
+                      color: 'custom.verifiedBadge',
+                      ml: '5px',
+                    }}
                   />
                 </Typography>
               </Link>

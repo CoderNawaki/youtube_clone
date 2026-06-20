@@ -26,7 +26,8 @@ const Feed = () => {
       <Box
         sx={{
           height: { sx: 'auto', md: '92vh' },
-          borderRight: '1px solid #3d3d3d',
+          borderRight: '1px solid',
+          borderColor: 'divider',
           px: { sx: 0, md: 2 },
         }}
       >
@@ -37,7 +38,7 @@ const Feed = () => {
         <Typography
           className="copyright"
           variant="body2"
-          sx={{ mt: 1.5, color: '#fff' }}
+          sx={{ mt: 1.5, color: 'text.primary' }}
         >
           Copyright 2025 youtube media
         </Typography>
@@ -52,9 +53,12 @@ const Feed = () => {
           variant="h4"
           fontWeight="bold"
           mb={2}
-          sx={{ color: 'white' }}
+          sx={{ color: 'text.primary' }}
         >
-          {selectedCategory} <span style={{ color: '#F31503' }}>videos</span>
+          {selectedCategory}{' '}
+          <Box component="span" sx={{ color: 'primary.main' }}>
+            videos
+          </Box>
         </Typography>
         {isLoading ? (
           <LoadingState message={`Loading ${selectedCategory} videos...`} />
