@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
 import { useAsyncResource } from '../../hooks';
-import { Sidebar, LoadingState, ErrorState, Videos } from '../';
+import { Sidebar, ErrorState, Videos, VideoGridSkeleton } from '../';
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState('New');
@@ -61,7 +61,7 @@ const Feed = () => {
           </Box>
         </Typography>
         {isLoading ? (
-          <LoadingState message={`Loading ${selectedCategory} videos...`} />
+          <VideoGridSkeleton count={8} />
         ) : errorMessage ? (
           <ErrorState
             title="Unable to load videos"

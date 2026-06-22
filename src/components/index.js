@@ -9,6 +9,7 @@ export { default as ErrorState } from './shared/ErrorState';
 export { default as EmptyState } from './shared/EmptyState';
 export { default as AppErrorBoundary } from './shared/AppErrorBoundary';
 export { default as Sidebar } from './shared/Sidebar';
+export { default as VideoGridSkeleton } from './shared/VideoCardSkeleton';
 export { default as Videos } from './video/Videos';
 export { default as VideoCard } from './video/VideoCard';
 export { default as ChannelCard } from './video/ChannelCard';

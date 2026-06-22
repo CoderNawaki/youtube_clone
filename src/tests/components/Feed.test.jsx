@@ -27,7 +27,9 @@ describe('Feed', () => {
   it('loads videos for the default category', async () => {
     renderWithRouter(<Feed />);
 
-    expect(screen.getByText('Loading New videos...')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      /New.*videos/
+    );
 
     expect(await screen.findByText('Mock video title')).toBeInTheDocument();
   });
