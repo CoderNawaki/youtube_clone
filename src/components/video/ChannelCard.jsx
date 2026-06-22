@@ -5,8 +5,24 @@ import { Link } from 'react-router-dom';
 
 import { demoProfilePicture } from '../../utils/constants';
 
+const abbreviateNumber = (num) => {
+  if (!num) {
+    return null;
+  }
+  const n = parseInt(num, 10);
+  if (n >= 1000000) {
+    return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (n >= 1000) {
+    return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return n.toLocaleString();
+};
+
 const ChannelCard = ({ channelDetail, marginTop }) => {
   const channelId = channelDetail?.id?.channelId || channelDetail?.id;
+  const title = channelDetail?.snippet?.title;
+  const subscriberCount = channelDetail?.statistics?.subscriberCount;
 
   return (
     <Box
@@ -20,11 +36,15 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
         height: '326px',
         margin: 'auto',
         marginTop,
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+        },
       }}
     >
       <Link
         to={`/channel/${channelId}`}
-        aria-label={`Open channel ${channelDetail?.snippet?.title || 'channel'}`}
+        aria-label={`Open channel ${title || 'channel'}`}
       >
         <CardContent
           sx={{
@@ -40,7 +60,7 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
               channelDetail?.snippet?.thumbnails?.high?.url ||
               demoProfilePicture
             }
-            alt={channelDetail?.snippet?.title}
+            alt={title}
             sx={{
               borderRadius: '50%',
               height: '180px',
@@ -51,18 +71,15 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
             }}
           />
           <Typography variant="h6">
-            {channelDetail?.snippet?.title}
+            {title}
             <CheckCircle
               aria-hidden="true"
               sx={{ fontSize: 12, color: 'custom.verifiedBadge', ml: '5px' }}
             />
           </Typography>
-          {channelDetail?.statistics?.subscriberCount && (
-            <Typography>
-              {parseInt(
-                channelDetail?.statistics?.subscriberCount
-              ).toLocaleString()}
-              Subscribers
+          {subscriberCount && (
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              {abbreviateNumber(subscriberCount)} Subscribers
             </Typography>
           )}
         </CardContent>

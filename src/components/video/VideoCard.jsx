@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
 
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
 
+import { formatRelativeTime } from '../../utils/formatRelativeTime';
 import {
   demoVideoUrl,
   demoVideoTitle,
@@ -16,53 +24,113 @@ const VideoCard = ({
     snippet,
   },
 }) => {
+  const title = snippet?.title || demoVideoTitle;
+  const channelTitle = snippet?.channelTitle || demoChannelTitle;
+  const channelId = snippet?.channelId;
+
   return (
     <Card
       sx={{
         width: { xs: '100%', sm: '358px', md: '320px' },
         boxShadow: 'none',
-        borderRadius: '0',
+        borderRadius: 0,
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+        },
       }}
     >
       <Link
         to={videoId ? `/video/${videoId}` : demoVideoUrl}
-        aria-label={`Open video ${snippet?.title || demoVideoTitle}`}
+        aria-label={`Open video ${title}`}
       >
         <CardMedia
           image={snippet?.thumbnails?.high?.url}
           alt={snippet?.title}
-          sx={{ width: { xs: '100%', sm: '358px' }, height: 180 }}
+          sx={{
+            width: { xs: '100%', sm: '358px' },
+            height: 180,
+            transition: 'transform 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.05)',
+            },
+          }}
         />
       </Link>
-      <CardContent sx={{ bgcolor: 'background.paper', height: '106px' }}>
+      <CardContent
+        sx={{
+          bgcolor: 'background.paper',
+          height: 'auto',
+          minHeight: 100,
+          p: 1.5,
+          display: 'flex',
+          gap: 1.5,
+        }}
+      >
         <Link
-          to={videoId ? `/video/${videoId}` : demoVideoUrl}
-          aria-label={`Open video ${snippet?.title || demoVideoTitle}`}
+          to={channelId ? `/channel/${channelId}` : demoChannelUrl}
+          aria-label={`Open channel ${channelTitle}`}
+          sx={{ flexShrink: 0, height: 'fit-content' }}
         >
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            color="text.primary"
+          <Avatar
+            alt={channelTitle}
+            sx={{
+              width: 36,
+              height: 36,
+              bgcolor: 'primary.main',
+              fontSize: 16,
+            }}
           >
-            {snippet?.title.slice(0, 60) || demoVideoTitle.slice(0, 60)}
-          </Typography>
+            {channelTitle.charAt(0).toUpperCase()}
+          </Avatar>
         </Link>
-        <Link
-          to={
-            snippet?.channelId
-              ? `/channel/${snippet?.channelId}`
-              : demoChannelUrl
-          }
-          aria-label={`Open channel ${snippet?.channelTitle || demoChannelTitle}`}
-        >
-          <Typography variant="subtitle2" fontWeight="bold" color="gray">
-            {snippet?.channelTitle || demoChannelTitle}
-          </Typography>
-          <CheckCircle
-            aria-hidden="true"
-            sx={{ fontSize: 12, color: 'custom.verifiedBadge', ml: '5px' }}
-          />
-        </Link>
+        <Box sx={{ minWidth: 0, flex: 1 }}>
+          <Link
+            to={videoId ? `/video/${videoId}` : demoVideoUrl}
+            aria-label={`Open video ${title}`}
+          >
+            <Typography
+              variant="subtitle2"
+              fontWeight="bold"
+              color="text.primary"
+              sx={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                lineHeight: 1.3,
+                mb: 0.5,
+              }}
+            >
+              {title}
+            </Typography>
+          </Link>
+          <Link
+            to={channelId ? `/channel/${channelId}` : demoChannelUrl}
+            aria-label={`Open channel ${channelTitle}`}
+            sx={{ display: 'inline-flex', alignItems: 'center' }}
+          >
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ mr: 0.5 }}
+            >
+              {channelTitle}
+            </Typography>
+            <CheckCircle
+              aria-hidden="true"
+              sx={{ fontSize: 12, color: 'custom.verifiedBadge' }}
+            />
+          </Link>
+          <Box>
+            {snippet?.publishedAt && (
+              <Typography variant="caption" color="text.secondary">
+                {formatRelativeTime(snippet.publishedAt)}
+              </Typography>
+            )}
+          </Box>
+        </Box>
       </CardContent>
     </Card>
   );
