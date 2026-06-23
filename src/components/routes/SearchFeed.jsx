@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
 import { useAsyncResource } from '../../hooks';
-import { Videos, LoadingState, ErrorState } from '../';
+import { Videos, ErrorState, VideoGridSkeleton } from '../';
 
 const SearchFeed = () => {
   const { searchTerm } = useParams();
@@ -43,7 +43,7 @@ const SearchFeed = () => {
       </Typography>
 
       {isLoading ? (
-        <LoadingState message={`Searching for "${searchTerm}"...`} />
+        <VideoGridSkeleton count={8} />
       ) : errorMessage ? (
         <ErrorState
           title="Search failed"
