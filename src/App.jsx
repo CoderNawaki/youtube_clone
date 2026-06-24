@@ -1,14 +1,64 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { AppErrorBoundary, Navbar, LoadingState } from './components/';
+import { AnimatePresence } from 'framer-motion';
+import {
+  AppErrorBoundary,
+  Navbar,
+  LoadingState,
+  AnimatedPage,
+} from './components/';
 import { theme } from './themes/';
 
 const Feed = lazy(() => import('./components/routes/Feed'));
 const VideoDetail = lazy(() => import('./components/routes/VideoDetail'));
 const ChannelDetail = lazy(() => import('./components/routes/ChannelDetail'));
 const SearchFeed = lazy(() => import('./components/routes/SearchFeed'));
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          exact
+          element={
+            <AnimatedPage>
+              <Feed />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/video/:id"
+          element={
+            <AnimatedPage>
+              <VideoDetail />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/channel/:id"
+          element={
+            <AnimatedPage>
+              <ChannelDetail />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/search/:searchTerm"
+          element={
+            <AnimatedPage>
+              <SearchFeed />
+            </AnimatedPage>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 const App = () => (
   <BrowserRouter>
@@ -18,12 +68,7 @@ const App = () => (
         <AppErrorBoundary>
           <Navbar />
           <Suspense fallback={<LoadingState message="Loading page..." />}>
-            <Routes>
-              <Route path="/" exact element={<Feed />} />
-              <Route path="/video/:id" element={<VideoDetail />} />
-              <Route path="/channel/:id" element={<ChannelDetail />} />
-              <Route path="/search/:searchTerm" element={<SearchFeed />} />
-            </Routes>
+            <AnimatedRoutes />
           </Suspense>
         </AppErrorBoundary>
       </Box>

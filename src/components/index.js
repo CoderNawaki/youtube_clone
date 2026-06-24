@@ -8,6 +8,7 @@ export { default as LoadingState } from './shared/LoadingState';
 export { default as ErrorState } from './shared/ErrorState';
 export { default as EmptyState } from './shared/EmptyState';
 export { default as AppErrorBoundary } from './shared/AppErrorBoundary';
+export { default as AnimatedPage } from './shared/AnimatedPage';
 export { default as Sidebar } from './shared/Sidebar';
 export { default as VideoGridSkeleton } from './shared/VideoCardSkeleton';
 export { default as Videos } from './video/Videos';
