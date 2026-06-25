@@ -1,24 +1,29 @@
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
-import { useAsyncResource } from '../../hooks';
+import { useInfiniteScroll } from '../../hooks';
 import { Videos, ErrorState, VideoGridSkeleton } from '../';
 
 const SearchFeed = () => {
   const { searchTerm } = useParams();
-  const loadVideos = useCallback(() => {
-    return fetchSearchVideos(searchTerm);
-  }, [searchTerm]);
+  const loadVideos = useCallback(
+    (pageToken) => {
+      return fetchSearchVideos(searchTerm, pageToken);
+    },
+    [searchTerm]
+  );
 
   const {
-    data: videos,
+    items: videos,
     isLoading,
+    isLoadingMore,
     errorMessage,
+    hasMore,
+    sentinelRef,
     reload,
-  } = useAsyncResource({
+  } = useInfiniteScroll({
     loader: loadVideos,
-    initialData: [],
     fallbackErrorMessage: 'Search failed.',
   });
 
@@ -51,7 +56,15 @@ const SearchFeed = () => {
           onRetry={reload}
         />
       ) : (
-        <Videos videos={videos} />
+        <>
+          <Videos videos={videos} />
+          {isLoadingMore && (
+            <Box display="flex" justifyContent="center" py={3}>
+              <CircularProgress size={28} sx={{ color: 'primary.main' }} />
+            </Box>
+          )}
+          {hasMore && <div ref={sentinelRef} style={{ height: 1 }} />}
+        </>
       )}
     </Box>
   );

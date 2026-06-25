@@ -1,23 +1,28 @@
 import { useCallback, useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
-import { useAsyncResource } from '../../hooks';
+import { useInfiniteScroll } from '../../hooks';
 import { Sidebar, ErrorState, Videos, VideoGridSkeleton } from '../';
 
 const Feed = () => {
   const [selectedCategory, setSelectedCategory] = useState('New');
-  const loadVideos = useCallback(() => {
-    return fetchSearchVideos(selectedCategory);
-  }, [selectedCategory]);
+  const loadVideos = useCallback(
+    (pageToken) => {
+      return fetchSearchVideos(selectedCategory, pageToken);
+    },
+    [selectedCategory]
+  );
 
   const {
-    data: videos,
+    items: videos,
     isLoading,
+    isLoadingMore,
     errorMessage,
+    hasMore,
+    sentinelRef,
     reload,
-  } = useAsyncResource({
+  } = useInfiniteScroll({
     loader: loadVideos,
-    initialData: [],
     fallbackErrorMessage: 'Unable to load videos.',
   });
 
@@ -69,7 +74,15 @@ const Feed = () => {
             onRetry={reload}
           />
         ) : (
-          <Videos videos={videos} />
+          <>
+            <Videos videos={videos} />
+            {isLoadingMore && (
+              <Box display="flex" justifyContent="center" py={3}>
+                <CircularProgress size={28} sx={{ color: 'primary.main' }} />
+              </Box>
+            )}
+            {hasMore && <div ref={sentinelRef} style={{ height: 1 }} />}
+          </>
         )}
       </Box>
     </Stack>
