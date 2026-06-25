@@ -13,7 +13,7 @@ export class ApiError extends Error {
   }
 }
 
-const getRequestOptions = () => {
+const getRequestOptions = (pageToken) => {
   const apiKey = process.env.REACT_APP_RAPID_API_KEY;
 
   if (!apiKey) {
@@ -25,6 +25,7 @@ const getRequestOptions = () => {
   return {
     params: {
       maxResults: '50',
+      ...(pageToken ? { pageToken } : {}),
     },
     headers: {
       'x-rapidapi-key': apiKey,
@@ -98,18 +99,21 @@ const mapApiError = (error) => {
   });
 };
 
-export const fetchFromAPI = async (url) => {
+export const fetchFromAPI = async (url, pageToken) => {
   try {
-    const { data } = await axios.get(`${BASE_URL}/${url}`, getRequestOptions());
+    const { data } = await axios.get(
+      `${BASE_URL}/${url}`,
+      getRequestOptions(pageToken)
+    );
     return ensureApiResponse(data);
   } catch (error) {
     throw mapApiError(error);
   }
 };
 
-export const fetchSearchVideos = async (query) => {
-  const data = await fetchFromAPI(`search?part=snippet&q=${query}`);
-  return data.items ?? [];
+export const fetchSearchVideos = async (query, pageToken) => {
+  const data = await fetchFromAPI(`search?part=snippet&q=${query}`, pageToken);
+  return { items: data.items ?? [], nextPageToken: data.nextPageToken ?? null };
 };
 
 export const fetchVideoDetails = async (id) => {
