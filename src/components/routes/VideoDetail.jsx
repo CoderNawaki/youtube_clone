@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ReactPlayer from 'react-player';
@@ -13,6 +13,7 @@ import {
   fetchRelatedVideos,
   fetchVideoDetails,
 } from '../../utils/fetchFromAPI';
+import { addRecentlyWatched } from '../../utils/recentlyWatched';
 
 const VideoDetail = () => {
   const { id } = useParams();
@@ -44,6 +45,24 @@ const VideoDetail = () => {
 
   const { videoDetail, videos } = videoData;
 
+  const {
+    snippet: { title, channelId, channelTitle },
+    statistics: { viewCount, likeCount },
+  } = videoDetail ?? { snippet: {}, statistics: {} };
+
+  useEffect(() => {
+    if (!videoDetail?.snippet) {
+      return;
+    }
+    addRecentlyWatched({
+      id,
+      title,
+      channelTitle,
+      channelId,
+      thumbnail: videoDetail.snippet.thumbnails?.high?.url || '',
+    });
+  }, [id, title, channelTitle, channelId, videoDetail]);
+
   if (isLoading) {
     return <LoadingState message="Loading video details..." />;
   }
@@ -57,11 +76,6 @@ const VideoDetail = () => {
       />
     );
   }
-
-  const {
-    snippet: { title, channelId, channelTitle },
-    statistics: { viewCount, likeCount },
-  } = videoDetail;
 
   return (
     <Box component="main" minHeight="95vh">
