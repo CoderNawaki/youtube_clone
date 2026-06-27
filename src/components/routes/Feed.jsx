@@ -1,11 +1,25 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
-import { useInfiniteScroll } from '../../hooks';
+import { useInfiniteScroll, usePersistedState } from '../../hooks';
 import { Sidebar, ErrorState, Videos, VideoGridSkeleton } from '../';
+import { getRecentlyWatched } from '../../utils/recentlyWatched';
+
+const toVideoItem = (rw) => ({
+  id: { videoId: rw.id },
+  snippet: {
+    title: rw.title,
+    channelTitle: rw.channelTitle,
+    channelId: rw.channelId,
+    thumbnails: { high: { url: rw.thumbnail } },
+  },
+});
 
 const Feed = () => {
-  const [selectedCategory, setSelectedCategory] = useState('New');
+  const [selectedCategory, setSelectedCategory] = usePersistedState(
+    'yt_selected_category',
+    'New'
+  );
   const loadVideos = useCallback(
     (pageToken) => {
       return fetchSearchVideos(selectedCategory, pageToken);
@@ -25,6 +39,8 @@ const Feed = () => {
     loader: loadVideos,
     fallbackErrorMessage: 'Unable to load videos.',
   });
+
+  const recentlyWatched = getRecentlyWatched();
 
   return (
     <Stack sx={{ flexDirection: { sx: 'column', md: 'row' } }}>
@@ -53,6 +69,20 @@ const Feed = () => {
         p={2}
         sx={{ overflowY: 'auto', height: '90vh', flex: 2 }}
       >
+        {recentlyWatched.length > 0 && (
+          <Box mb={3}>
+            <Typography
+              component="h2"
+              variant="h6"
+              fontWeight="bold"
+              mb={1}
+              sx={{ color: 'text.primary' }}
+            >
+              Recently watched
+            </Typography>
+            <Videos videos={recentlyWatched.map(toVideoItem)} />
+          </Box>
+        )}
         <Typography
           component="h1"
           variant="h4"
