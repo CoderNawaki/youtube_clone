@@ -9,6 +9,7 @@ import {
   LoadingState,
   AnimatedPage,
 } from './components/';
+import { LoadingBarProvider } from './components/layout/TopLoadingBar';
 import { theme } from './themes/';
 
 const Feed = lazy(() => import('./components/routes/Feed'));
@@ -67,9 +68,11 @@ const App = () => (
       <Box sx={{ backgroundColor: 'background.default' }}>
         <AppErrorBoundary>
           <Navbar />
-          <Suspense fallback={<LoadingState message="Loading page..." />}>
-            <AnimatedRoutes />
-          </Suspense>
+          <LoadingBarProvider>
+            <Suspense fallback={<LoadingState message="Loading page..." />}>
+              <AnimatedRoutes />
+            </Suspense>
+          </LoadingBarProvider>
         </AppErrorBoundary>
       </Box>
     </ThemeProvider>
