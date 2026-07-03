@@ -44,7 +44,13 @@ const SearchBar = () => {
   };
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        flex: { xs: 1, md: undefined },
+        maxWidth: { md: 400 },
+      }}
+    >
       <Paper
         component="form"
         onSubmit={handleSubmit}
