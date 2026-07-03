@@ -1,9 +1,18 @@
 import { useCallback } from 'react';
-import { Box, CircularProgress, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Drawer,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
 import { useInfiniteScroll, usePersistedState } from '../../hooks';
 import { Sidebar, ErrorState, Videos, VideoGridSkeleton } from '../';
 import { getRecentlyWatched } from '../../utils/recentlyWatched';
+import { useSidebar } from '../../context/SidebarContext';
 
 const toVideoItem = (rw) => ({
   id: { videoId: rw.id },
@@ -41,29 +50,54 @@ const Feed = () => {
   });
 
   const recentlyWatched = getRecentlyWatched();
+  const { mobileOpen, setMobileOpen } = useSidebar();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+  const sidebarContent = (
+    <>
+      <Sidebar
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+      <Typography
+        className="copyright"
+        variant="body2"
+        sx={{ mt: 1.5, color: 'text.primary' }}
+      >
+        Copyright 2025 youtube media
+      </Typography>
+    </>
+  );
 
   return (
     <Stack sx={{ flexDirection: { sx: 'column', md: 'row' } }}>
-      <Box
-        sx={{
-          height: { sx: 'auto', md: '92vh' },
-          borderRight: '1px solid',
-          borderColor: 'divider',
-          px: { sx: 0, md: 2 },
-        }}
-      >
-        <Sidebar
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-        <Typography
-          className="copyright"
-          variant="body2"
-          sx={{ mt: 1.5, color: 'text.primary' }}
+      {isDesktop ? (
+        <Box
+          sx={{
+            height: '92vh',
+            borderRight: '1px solid',
+            borderColor: 'divider',
+            px: 2,
+          }}
         >
-          Copyright 2025 youtube media
-        </Typography>
-      </Box>
+          {sidebarContent}
+        </Box>
+      ) : (
+        <Drawer
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          sx={{
+            '& .MuiDrawer-paper': {
+              bgcolor: 'background.default',
+              width: 240,
+              p: 2,
+            },
+          }}
+        >
+          {sidebarContent}
+        </Drawer>
+      )}
       <Box
         component="main"
         p={2}
