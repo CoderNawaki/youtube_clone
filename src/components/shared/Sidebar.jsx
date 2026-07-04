@@ -5,11 +5,10 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
   <Stack
     component="nav"
     aria-label="Video categories"
-    direction="row"
+    direction="column"
     sx={{
       overflow: 'auto',
       height: { sx: 'auto', md: '95%' },
-      flexDirection: { md: 'column' },
     }}
   >
     {categories.map((category) => (
