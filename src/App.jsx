@@ -9,6 +9,7 @@ import {
   LoadingState,
   AnimatedPage,
 } from './components/';
+import MobileBottomNav from './components/layout/MobileBottomNav';
 import { LoadingBarProvider } from './components/layout/TopLoadingBar';
 import { SidebarProvider } from './context/SidebarContext';
 import { theme } from './themes/';
@@ -75,6 +76,7 @@ const App = () => (
                 <AnimatedRoutes />
               </Suspense>
             </LoadingBarProvider>
+            <MobileBottomNav />
           </SidebarProvider>
         </AppErrorBoundary>
       </Box>

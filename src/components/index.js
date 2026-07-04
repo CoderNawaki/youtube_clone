@@ -10,6 +10,7 @@ export { default as EmptyState } from './shared/EmptyState';
 export { default as AppErrorBoundary } from './shared/AppErrorBoundary';
 export { default as AnimatedPage } from './shared/AnimatedPage';
 export { default as Sidebar } from './shared/Sidebar';
+export { default as CategoryChips } from './shared/CategoryChips';
 export { default as VideoGridSkeleton } from './shared/VideoCardSkeleton';
 export { default as Videos } from './video/Videos';
 export { default as VideoCard } from './video/VideoCard';
