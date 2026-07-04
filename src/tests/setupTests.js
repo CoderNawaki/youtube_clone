@@ -4,16 +4,21 @@ import { server } from './mocks/server';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: true,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
+  value: vi.fn().mockImplementation((query) => {
+    const isDesktopQuery = query.includes('min-width: 900px');
+    const isMobileQuery = query.includes('max-width: 899');
+    return {
+      matches:
+        isDesktopQuery || (!isMobileQuery && !query.includes('max-width')),
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    };
+  }),
 });
 
 const originalWarn = console.warn;

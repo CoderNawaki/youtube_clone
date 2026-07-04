@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import {
   Box,
   CircularProgress,
-  Drawer,
   Stack,
   Typography,
   useMediaQuery,
@@ -10,9 +9,14 @@ import {
 } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
 import { useInfiniteScroll, usePersistedState } from '../../hooks';
-import { Sidebar, ErrorState, Videos, VideoGridSkeleton } from '../';
+import {
+  CategoryChips,
+  ErrorState,
+  Sidebar,
+  Videos,
+  VideoGridSkeleton,
+} from '../';
 import { getRecentlyWatched } from '../../utils/recentlyWatched';
-import { useSidebar } from '../../context/SidebarContext';
 
 const toVideoItem = (rw) => ({
   id: { videoId: rw.id },
@@ -50,29 +54,12 @@ const Feed = () => {
   });
 
   const recentlyWatched = getRecentlyWatched();
-  const { mobileOpen, setMobileOpen } = useSidebar();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
-  const sidebarContent = (
-    <>
-      <Sidebar
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      <Typography
-        className="copyright"
-        variant="body2"
-        sx={{ mt: 1.5, color: 'text.primary' }}
-      >
-        Copyright 2025 youtube media
-      </Typography>
-    </>
-  );
-
   return (
     <Stack sx={{ flexDirection: { sx: 'column', md: 'row' } }}>
-      {isDesktop ? (
+      {isDesktop && (
         <Box
           sx={{
             height: '92vh',
@@ -81,28 +68,33 @@ const Feed = () => {
             px: 2,
           }}
         >
-          {sidebarContent}
+          <Sidebar
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <Typography
+            className="copyright"
+            variant="body2"
+            sx={{ mt: 1.5, color: 'text.primary' }}
+          >
+            Copyright 2025 youtube media
+          </Typography>
         </Box>
-      ) : (
-        <Drawer
-          open={mobileOpen}
-          onClose={() => setMobileOpen(false)}
-          sx={{
-            '& .MuiDrawer-paper': {
-              bgcolor: 'background.default',
-              width: 240,
-              p: 2,
-            },
-          }}
-        >
-          {sidebarContent}
-        </Drawer>
       )}
       <Box
         component="main"
         p={2}
-        sx={{ overflowY: 'auto', height: '90vh', flex: 2 }}
+        sx={{
+          overflowY: 'auto',
+          height: '90vh',
+          flex: 2,
+          pb: { xs: 7, md: 2 },
+        }}
       >
+        <CategoryChips
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
         {recentlyWatched.length > 0 && (
           <Box mb={3}>
             <Typography

@@ -1,15 +1,53 @@
-import { Link } from 'react-router-dom';
+import { useCallback, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Box, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
-import { Menu } from '@mui/icons-material';
+import { ArrowBack, NotificationsNone, Search } from '@mui/icons-material';
 
 import { logo } from '../../utils/constants';
 import SearchBar from './SearchBar';
-import { useSidebar } from '../../context/SidebarContext';
 
 const Navbar = () => {
-  const { setMobileOpen } = useSidebar();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [showSearch, setShowSearch] = useState(false);
+
+  const handleSearchClick = useCallback(() => {
+    if (isMobile) {
+      setShowSearch(true);
+    } else {
+      navigate('/search/new');
+    }
+  }, [isMobile, navigate]);
+
+  if (isMobile && showSearch) {
+    return (
+      <Stack
+        component="header"
+        role="banner"
+        direction="row"
+        alignItems="center"
+        p={1}
+        sx={{
+          position: 'sticky',
+          bgcolor: 'background.default',
+          top: 0,
+          gap: 1,
+        }}
+      >
+        <IconButton
+          aria-label="Close search"
+          onClick={() => setShowSearch(false)}
+          sx={{ color: 'text.primary' }}
+        >
+          <ArrowBack />
+        </IconButton>
+        <Box sx={{ flex: 1 }}>
+          <SearchBar />
+        </Box>
+      </Stack>
+    );
+  }
 
   return (
     <Stack
@@ -17,36 +55,39 @@ const Navbar = () => {
       role="banner"
       direction="row"
       alignItems="center"
-      p={2}
+      px={2}
+      py={1}
       sx={{
         position: 'sticky',
         bgcolor: 'background.default',
         top: 0,
         justifyContent: 'space-between',
+        minHeight: 56,
       }}
     >
-      <Stack direction="row" alignItems="center" gap={1}>
+      <Link
+        to="/"
+        aria-label="Go to homepage"
+        style={{ display: 'flex', alignItems: 'center' }}
+      >
+        <img src={logo} alt="logo" height={isMobile ? 28 : 45} />
+      </Link>
+
+      <Stack direction="row" alignItems="center" gap={0.5}>
+        <IconButton aria-label="Notifications" sx={{ color: 'text.primary' }}>
+          <NotificationsNone />
+        </IconButton>
         {isMobile && (
           <IconButton
-            aria-label="Open navigation menu"
-            onClick={() => setMobileOpen(true)}
+            aria-label="Search"
+            onClick={handleSearchClick}
             sx={{ color: 'text.primary' }}
           >
-            <Menu />
+            <Search />
           </IconButton>
         )}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-          <Link
-            to="/"
-            aria-label="Go to homepage"
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            <img src={logo} alt="logo" height={45} />
-          </Link>
-        </Box>
+        {!isMobile && <SearchBar />}
       </Stack>
-
-      <SearchBar />
     </Stack>
   );
 };

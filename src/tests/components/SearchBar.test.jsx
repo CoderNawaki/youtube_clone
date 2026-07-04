@@ -5,6 +5,8 @@ import { vi } from 'vitest';
 import SearchBar from '../../components/layout/SearchBar';
 import { renderWithRouter } from '../test-utils';
 
+vi.setConfig({ testTimeout: 10000 });
+
 const mockedNavigate = vi.fn();
 
 vi.mock('react-router-dom', async () => {

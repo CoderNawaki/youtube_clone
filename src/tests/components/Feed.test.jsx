@@ -41,7 +41,8 @@ describe('Feed', () => {
 
     expect(await screen.findByText('Mock video title')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /coding/i }));
+    const codingButtons = screen.getAllByRole('button', { name: /coding/i });
+    await user.click(codingButtons[0]);
 
     await waitFor(() => {
       expect(screen.getByText('Coding deep dive')).toBeInTheDocument();

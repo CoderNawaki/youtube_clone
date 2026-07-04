@@ -6,6 +6,9 @@ import App from '../App';
 vi.mock('../components/layout/Navbar', () => ({
   default: () => <div>Navbar</div>,
 }));
+vi.mock('../components/layout/MobileBottomNav', () => ({
+  default: () => null,
+}));
 vi.mock('../components/shared/LoadingState', () => ({
   default: () => <div>Loading page...</div>,
 }));
