@@ -60,9 +60,14 @@ const SearchBar = () => {
           borderRadius: 20,
           border: '1px solid',
           borderColor: 'custom.searchBorder',
-          pl: 2,
           boxShadow: 'none',
           mr: { sm: 5 },
+          display: 'flex',
+          alignItems: 'center',
+          pl: 2,
+          '&:focus-within': {
+            borderColor: 'primary.main',
+          },
         }}
       >
         <input
@@ -73,11 +78,12 @@ const SearchBar = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setTimeout(() => setFocused(false), 150)}
+          style={{ flex: 1, minWidth: 0 }}
         />
         <IconButton
           type="submit"
           aria-label="Submit search"
-          sx={{ p: '10px', color: 'primary.main' }}
+          sx={{ p: '10px', color: 'primary.main', flexShrink: 0 }}
         >
           <Search />
         </IconButton>

@@ -30,9 +30,19 @@
 .search-bar {
   border: none;
   outline: none;
-  width: 350px;
   background: transparent;
-  color: #111;
+  color: inherit;
+  font-size: 16px;
+}
+
+.search-bar:focus,
+.search-bar:focus-visible {
+  outline: none;
+}
+
+.search-bar::placeholder {
+  color: inherit;
+  opacity: 0.5;
 }
 
 .category-btn {
@@ -73,6 +83,6 @@
     height: 45vh !important;
   }
   .search-bar {
-    width: 200px;
+    width: 100%;
   }
 }

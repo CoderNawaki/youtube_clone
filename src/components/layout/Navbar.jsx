@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 
 import { logo } from '../../utils/constants';
@@ -35,13 +35,15 @@ const Navbar = () => {
             <Menu />
           </IconButton>
         )}
-        <Link
-          to="/"
-          aria-label="Go to homepage"
-          style={{ display: 'flex', alignItems: 'center' }}
-        >
-          <img src={logo} alt="logo" height={45} />
-        </Link>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+          <Link
+            to="/"
+            aria-label="Go to homepage"
+            style={{ display: 'flex', alignItems: 'center' }}
+          >
+            <img src={logo} alt="logo" height={45} />
+          </Link>
+        </Box>
       </Stack>
 
       <SearchBar />
