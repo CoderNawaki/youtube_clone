@@ -1,9 +1,11 @@
-import { Box, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Button, CardContent, CardMedia, Typography } from '@mui/material';
+import { useState } from 'react';
 
 import { CheckCircle } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 import { demoProfilePicture } from '../../utils/constants';
+import { isSubscribed, toggleSubscription } from '../../utils/subscriptions';
 
 const abbreviateNumber = (num) => {
   if (!num) {
@@ -23,6 +25,20 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
   const channelId = channelDetail?.id?.channelId || channelDetail?.id;
   const title = channelDetail?.snippet?.title;
   const subscriberCount = channelDetail?.statistics?.subscriberCount;
+  const subscribed = isSubscribed(channelId);
+  const [, setTick] = useState(0);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleSubscription({
+      id: channelId,
+      title,
+      thumbnail:
+        channelDetail?.snippet?.thumbnails?.high?.url || demoProfilePicture,
+    });
+    setTick((t) => t + 1);
+  };
 
   return (
     <Box
@@ -82,6 +98,17 @@ const ChannelCard = ({ channelDetail, marginTop }) => {
               {abbreviateNumber(subscriberCount)} Subscribers
             </Typography>
           )}
+          <Box mt={1}>
+            <Button
+              variant={subscribed ? 'outlined' : 'contained'}
+              color="primary"
+              size="small"
+              onClick={handleSubscribe}
+              sx={{ textTransform: 'none', borderRadius: 20, px: 2 }}
+            >
+              {subscribed ? 'Subscribed' : 'Subscribe'}
+            </Button>
+          </Box>
         </CardContent>
       </Link>
     </Box>

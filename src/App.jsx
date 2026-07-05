@@ -18,6 +18,9 @@ const Feed = lazy(() => import('./components/routes/Feed'));
 const VideoDetail = lazy(() => import('./components/routes/VideoDetail'));
 const ChannelDetail = lazy(() => import('./components/routes/ChannelDetail'));
 const SearchFeed = lazy(() => import('./components/routes/SearchFeed'));
+const Shorts = lazy(() => import('./components/routes/Shorts'));
+const Subscriptions = lazy(() => import('./components/routes/Subscriptions'));
+const You = lazy(() => import('./components/routes/You'));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -55,6 +58,30 @@ const AnimatedRoutes = () => {
           element={
             <AnimatedPage>
               <SearchFeed />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/shorts"
+          element={
+            <AnimatedPage>
+              <Shorts />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/subscriptions"
+          element={
+            <AnimatedPage>
+              <Subscriptions />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/you"
+          element={
+            <AnimatedPage>
+              <You />
             </AnimatedPage>
           }
         />

@@ -1,6 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, IconButton, Stack, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Snackbar,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { ArrowBack, NotificationsNone, Search } from '@mui/icons-material';
 
 import { logo } from '../../utils/constants';
@@ -11,6 +18,7 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSearch, setShowSearch] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const handleSearchClick = useCallback(() => {
     if (isMobile) {
@@ -50,45 +58,58 @@ const Navbar = () => {
   }
 
   return (
-    <Stack
-      component="header"
-      role="banner"
-      direction="row"
-      alignItems="center"
-      px={2}
-      py={1}
-      sx={{
-        position: 'sticky',
-        bgcolor: 'background.default',
-        top: 0,
-        justifyContent: 'space-between',
-        minHeight: 56,
-      }}
-    >
-      <Link
-        to="/"
-        aria-label="Go to homepage"
-        style={{ display: 'flex', alignItems: 'center' }}
+    <>
+      <Stack
+        component="header"
+        role="banner"
+        direction="row"
+        alignItems="center"
+        px={2}
+        py={1}
+        sx={{
+          position: 'sticky',
+          bgcolor: 'background.default',
+          top: 0,
+          justifyContent: 'space-between',
+          minHeight: 56,
+        }}
       >
-        <img src={logo} alt="logo" height={isMobile ? 28 : 45} />
-      </Link>
+        <Link
+          to="/"
+          aria-label="Go to homepage"
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <img src={logo} alt="logo" height={isMobile ? 28 : 45} />
+        </Link>
 
-      <Stack direction="row" alignItems="center" gap={0.5}>
-        <IconButton aria-label="Notifications" sx={{ color: 'text.primary' }}>
-          <NotificationsNone />
-        </IconButton>
-        {isMobile && (
+        <Stack direction="row" alignItems="center" gap={0.5}>
           <IconButton
-            aria-label="Search"
-            onClick={handleSearchClick}
+            aria-label="Notifications"
+            onClick={() => setNotifOpen(true)}
             sx={{ color: 'text.primary' }}
           >
-            <Search />
+            <NotificationsNone />
           </IconButton>
-        )}
-        {!isMobile && <SearchBar />}
+          {isMobile && (
+            <IconButton
+              aria-label="Search"
+              onClick={handleSearchClick}
+              sx={{ color: 'text.primary' }}
+            >
+              <Search />
+            </IconButton>
+          )}
+          {!isMobile && <SearchBar />}
+        </Stack>
       </Stack>
-    </Stack>
+      <Snackbar
+        open={notifOpen}
+        onClose={() => setNotifOpen(false)}
+        message="No notifications"
+        autoHideDuration={2000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      />
+    </>
   );
 };
 
