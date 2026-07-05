@@ -65,6 +65,16 @@ const ChannelDetail = () => {
     );
   }
 
+  if (!channelDetail) {
+    return (
+      <ErrorState
+        title="Channel not found"
+        message="The requested channel could not be found."
+        onRetry={reload}
+      />
+    );
+  }
+
   return (
     <Box component="main" minHeight="95vh">
       <Box>

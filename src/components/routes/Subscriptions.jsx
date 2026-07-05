@@ -1,26 +1,27 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { fetchSearchVideos } from '../../utils/fetchFromAPI';
+import { fetchChannelVideos } from '../../utils/fetchFromAPI';
 import { getSubscriptions } from '../../utils/subscriptions';
 import { Videos, EmptyState, ErrorState, VideoGridSkeleton } from '../';
 
 const Subscriptions = () => {
-  const subs = getSubscriptions();
   const [videos, setVideos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const loadSubVideos = useCallback(async () => {
+    const subs = getSubscriptions();
     if (subs.length === 0) {
+      setVideos([]);
       return;
     }
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const queries = subs.map((s) => fetchSearchVideos(s.title, null));
+      const queries = subs.map((s) => fetchChannelVideos(s.id));
       const results = await Promise.all(queries);
-      const all = results.flatMap((r) => r?.items || []);
+      const all = results.flatMap((r) => r || []);
       const seen = new Set();
       const unique = all.filter((v) => {
         const id = v?.id?.videoId;
@@ -36,11 +37,13 @@ const Subscriptions = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [subs]);
+  }, []);
 
   useEffect(() => {
     loadSubVideos();
   }, [loadSubVideos]);
+
+  const subs = getSubscriptions();
 
   if (subs.length === 0) {
     return (
