@@ -20,7 +20,7 @@ const Subscriptions = () => {
     try {
       const queries = subs.map((s) => fetchSearchVideos(s.title, null));
       const results = await Promise.all(queries);
-      const all = results.flat().filter(Boolean);
+      const all = results.flatMap((r) => r?.items || []);
       const seen = new Set();
       const unique = all.filter((v) => {
         const id = v?.id?.videoId;
