@@ -15,3 +15,6 @@ export { default as VideoGridSkeleton } from './shared/VideoCardSkeleton';
 export { default as Videos } from './video/Videos';
 export { default as VideoCard } from './video/VideoCard';
 export { default as ChannelCard } from './video/ChannelCard';
+export { default as Shorts } from './routes/Shorts';
+export { default as Subscriptions } from './routes/Subscriptions';
+export { default as You } from './routes/You';

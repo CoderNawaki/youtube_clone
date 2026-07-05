@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BottomNavigation,
@@ -14,16 +14,21 @@ import {
   Person,
   Subscriptions,
 } from '@mui/icons-material';
-import { useState } from 'react';
 
 const MobileBottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [snackOpen, setSnackOpen] = useState(false);
+  const [uploadSnack, setUploadSnack] = useState(false);
 
   const getValue = () => {
     const path = location.pathname;
-    if (path.startsWith('/channel')) {
+    if (path === '/shorts') {
+      return 1;
+    }
+    if (path === '/subscriptions') {
+      return 3;
+    }
+    if (path === '/you' || path.startsWith('/channel')) {
       return 4;
     }
     return 0;
@@ -34,13 +39,13 @@ const MobileBottomNav = () => {
       if (newValue === 0) {
         navigate('/');
       } else if (newValue === 1) {
-        navigate('/');
+        navigate('/shorts');
       } else if (newValue === 2) {
-        setSnackOpen(true);
+        setUploadSnack(true);
       } else if (newValue === 3) {
-        navigate('/');
+        navigate('/subscriptions');
       } else if (newValue === 4) {
-        navigate('/channel/UCXuqSBlHAE6Xw-yeJA0Tunw');
+        navigate('/you');
       }
     },
     [navigate]
@@ -112,8 +117,8 @@ const MobileBottomNav = () => {
         </BottomNavigation>
       </Paper>
       <Snackbar
-        open={snackOpen}
-        onClose={() => setSnackOpen(false)}
+        open={uploadSnack}
+        onClose={() => setUploadSnack(false)}
         message="Upload not available in demo"
         autoHideDuration={2000}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

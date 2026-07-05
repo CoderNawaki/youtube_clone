@@ -1,12 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Videos, ChannelCard, LoadingState, ErrorState } from '../';
 import { useAsyncResource } from '../../hooks';
 import {
   fetchChannelDetails,
   fetchChannelVideos,
 } from '../../utils/fetchFromAPI';
+import { isSubscribed, toggleSubscription } from '../../utils/subscriptions';
 
 const ChannelDetail = () => {
   const { id } = useParams();
@@ -37,6 +38,18 @@ const ChannelDetail = () => {
   });
 
   const { channelDetail, videos } = channelData;
+  const channelId = channelDetail?.id?.channelId || channelDetail?.id;
+  const [, setSubTick] = useState(0);
+  const subscribed = isSubscribed(channelId);
+
+  const handleSubscribe = () => {
+    toggleSubscription({
+      id: channelId,
+      title: channelDetail?.snippet?.title,
+      thumbnail: channelDetail?.snippet?.thumbnails?.high?.url,
+    });
+    setSubTick((t) => t + 1);
+  };
 
   if (isLoading) {
     return <LoadingState message="Loading channel details..." />;
@@ -64,6 +77,17 @@ const ChannelDetail = () => {
           }}
         ></div>
         <ChannelCard channelDetail={channelDetail} marginTop="-110px" />
+      </Box>
+      <Box display="flex" justifyContent="center" mt={-2} mb={2}>
+        <Button
+          variant={subscribed ? 'outlined' : 'contained'}
+          color="primary"
+          size="medium"
+          onClick={handleSubscribe}
+          sx={{ textTransform: 'none', borderRadius: 20, px: 3 }}
+        >
+          {subscribed ? 'Subscribed' : 'Subscribe'}
+        </Button>
       </Box>
       <Box display="flex" p="2">
         <Box sx={{ mr: { sm: '100px' } }} />
