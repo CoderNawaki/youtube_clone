@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   BottomNavigation,
@@ -34,23 +34,6 @@ const MobileBottomNav = () => {
     return 0;
   };
 
-  const handleChange = useCallback(
-    (_, newValue) => {
-      if (newValue === 0) {
-        navigate('/');
-      } else if (newValue === 1) {
-        navigate('/shorts');
-      } else if (newValue === 2) {
-        setUploadSnack(true);
-      } else if (newValue === 3) {
-        navigate('/subscriptions');
-      } else if (newValue === 4) {
-        navigate('/you');
-      }
-    },
-    [navigate]
-  );
-
   return (
     <>
       <Paper
@@ -59,13 +42,13 @@ const MobileBottomNav = () => {
       >
         <BottomNavigation
           value={getValue()}
-          onChange={handleChange}
           showLabels
           sx={{ bgcolor: 'background.paper' }}
         >
           <BottomNavigationAction
             label="Home"
             icon={<Home />}
+            onClick={() => navigate('/')}
             sx={{
               color: 'text.secondary',
               '&.Mui-selected': { color: 'primary.main' },
@@ -74,6 +57,7 @@ const MobileBottomNav = () => {
           <BottomNavigationAction
             label="Shorts"
             icon={<OndemandVideo />}
+            onClick={() => navigate('/shorts')}
             sx={{
               color: 'text.secondary',
               '&.Mui-selected': { color: 'primary.main' },
@@ -81,6 +65,7 @@ const MobileBottomNav = () => {
           />
           <BottomNavigationAction
             label=""
+            onClick={() => setUploadSnack(true)}
             icon={
               <Box
                 sx={{
@@ -101,6 +86,7 @@ const MobileBottomNav = () => {
           <BottomNavigationAction
             label="Subscriptions"
             icon={<Subscriptions />}
+            onClick={() => navigate('/subscriptions')}
             sx={{
               color: 'text.secondary',
               '&.Mui-selected': { color: 'primary.main' },
@@ -109,6 +95,7 @@ const MobileBottomNav = () => {
           <BottomNavigationAction
             label="You"
             icon={<Person />}
+            onClick={() => navigate('/you')}
             sx={{
               color: 'text.secondary',
               '&.Mui-selected': { color: 'primary.main' },
