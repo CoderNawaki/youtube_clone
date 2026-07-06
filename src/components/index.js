@@ -1,9 +1,4 @@
 export { default as Navbar } from './layout/Navbar';
-export { default as SearchBar } from './layout/SearchBar';
-export { default as Feed } from './routes/Feed';
-export { default as ChannelDetail } from './routes/ChannelDetail';
-export { default as SearchFeed } from './routes/SearchFeed';
-export { default as VideoDetail } from './routes/VideoDetail';
 export { default as LoadingState } from './shared/LoadingState';
 export { default as ErrorState } from './shared/ErrorState';
 export { default as EmptyState } from './shared/EmptyState';
@@ -13,8 +8,4 @@ export { default as Sidebar } from './shared/Sidebar';
 export { default as CategoryChips } from './shared/CategoryChips';
 export { default as VideoGridSkeleton } from './shared/VideoCardSkeleton';
 export { default as Videos } from './video/Videos';
-export { default as VideoCard } from './video/VideoCard';
 export { default as ChannelCard } from './video/ChannelCard';
-export { default as Shorts } from './routes/Shorts';
-export { default as Subscriptions } from './routes/Subscriptions';
-export { default as You } from './routes/You';

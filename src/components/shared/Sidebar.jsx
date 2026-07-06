@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { Stack } from '@mui/material';
 import { categories } from '../../utils/constants';
 
-const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
+const Sidebar = memo(({ selectedCategory, setSelectedCategory }) => (
   <Stack
     component="nav"
     aria-label="Video categories"
@@ -39,6 +40,6 @@ const Sidebar = ({ selectedCategory, setSelectedCategory }) => (
       </button>
     ))}
   </Stack>
-);
+));
 
 export default Sidebar;

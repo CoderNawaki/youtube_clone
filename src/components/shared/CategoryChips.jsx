@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { Chip, Stack, useMediaQuery, useTheme } from '@mui/material';
 import { categories } from '../../utils/constants';
 
-const CategoryChips = ({ selectedCategory, setSelectedCategory }) => {
+const CategoryChips = memo(({ selectedCategory, setSelectedCategory }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -49,6 +50,6 @@ const CategoryChips = ({ selectedCategory, setSelectedCategory }) => {
       ))}
     </Stack>
   );
-};
+});
 
 export default CategoryChips;
