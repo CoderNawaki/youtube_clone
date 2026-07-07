@@ -1,4 +1,5 @@
-import { Box, Chip, Divider, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import { Box, Chip, Divider, Stack, Typography } from '@mui/material';
 import {
   History,
   Subscriptions as SubscriptionsIcon,
@@ -11,6 +12,7 @@ import {
   getSubscriptionCount,
 } from '../../utils/subscriptions';
 import { Videos } from '../';
+import SubscriptionCard from '../shared/SubscriptionCard';
 import { Link } from 'react-router-dom';
 
 const toVideoItem = (rw) => ({
@@ -24,9 +26,9 @@ const toVideoItem = (rw) => ({
 });
 
 const You = () => {
-  const recentlyWatched = getRecentlyWatched();
-  const subs = getSubscriptions();
-  const subCount = getSubscriptionCount();
+  const recentlyWatched = useMemo(() => getRecentlyWatched(), []);
+  const subs = useMemo(() => getSubscriptions(), []);
+  const subCount = useMemo(() => getSubscriptionCount(), []);
 
   return (
     <Box
@@ -83,27 +85,30 @@ const You = () => {
               Subscriptions
             </Typography>
           </Box>
-          <Box display="flex" gap={1} flexWrap="wrap">
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{
+              overflow: 'auto',
+              '&::-webkit-scrollbar': { display: 'none' },
+              scrollbarWidth: 'none',
+            }}
+          >
             {subs.map((sub) => (
-              <Chip
+              <Box
                 key={sub.id}
-                label={sub.title}
-                component={Link}
-                to={`/channel/${sub.id}`}
-                avatar={
-                  <Box
-                    component="img"
-                    src={sub.thumbnail}
-                    alt={sub.title}
-                    sx={{ width: 24, height: 24, borderRadius: '50%' }}
-                  />
-                }
-                variant="outlined"
-                clickable
-                sx={{ borderRadius: 20 }}
-              />
+                sx={{
+                  minWidth: 200,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 2,
+                  flexShrink: 0,
+                }}
+              >
+                <SubscriptionCard sub={sub} />
+              </Box>
             ))}
-          </Box>
+          </Stack>
         </Box>
       )}
 

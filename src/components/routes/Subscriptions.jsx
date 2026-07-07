@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Avatar, Box, Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
 import { fetchChannelVideos } from '../../utils/fetchFromAPI';
 import { getSubscriptions } from '../../utils/subscriptions';
 import { Videos, EmptyState, ErrorState, VideoGridSkeleton } from '../';
+import SubscriptionCard from '../shared/SubscriptionCard';
 
 const Subscriptions = () => {
   const [videos, setVideos] = useState([]);
@@ -43,7 +43,7 @@ const Subscriptions = () => {
     loadSubVideos();
   }, [loadSubVideos]);
 
-  const subs = getSubscriptions();
+  const subs = useMemo(() => getSubscriptions(), []);
 
   if (subs.length === 0) {
     return (
@@ -80,29 +80,31 @@ const Subscriptions = () => {
       >
         Subscriptions
       </Typography>
-      <Box display="flex" gap={1.5} flexWrap="wrap" mb={3}>
+      <Stack
+        direction="row"
+        spacing={0.5}
+        sx={{
+          overflow: 'auto',
+          mb: 3,
+          '&::-webkit-scrollbar': { display: 'none' },
+          scrollbarWidth: 'none',
+        }}
+      >
         {subs.map((sub) => (
-          <Button
+          <Box
             key={sub.id}
-            component={Link}
-            to={`/channel/${sub.id}`}
-            variant="outlined"
-            size="small"
-            startIcon={
-              <Avatar
-                src={sub.thumbnail}
-                alt={sub.title}
-                sx={{ width: 24, height: 24 }}
-              >
-                {sub.title?.charAt(0)}
-              </Avatar>
-            }
-            sx={{ textTransform: 'none', borderRadius: 20 }}
+            sx={{
+              minWidth: 200,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 2,
+              flexShrink: 0,
+            }}
           >
-            {sub.title}
-          </Button>
+            <SubscriptionCard sub={sub} />
+          </Box>
         ))}
-      </Box>
+      </Stack>
       {isLoading ? (
         <VideoGridSkeleton count={4} />
       ) : errorMessage ? (
