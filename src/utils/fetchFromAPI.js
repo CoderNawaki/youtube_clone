@@ -129,7 +129,9 @@ export const fetchRelatedVideos = async (id) => {
 };
 
 export const fetchChannelDetails = async (id) => {
-  const data = await fetchFromAPI(`channels?part=snippet,statistics&id=${id}`);
+  const data = await fetchFromAPI(
+    `channels?part=snippet,statistics,brandingSettings&id=${id}`
+  );
   return data.items?.[0] ?? null;
 };
 
