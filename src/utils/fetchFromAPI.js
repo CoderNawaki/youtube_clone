@@ -141,3 +141,14 @@ export const fetchChannelVideos = async (id) => {
   );
   return data.items ?? [];
 };
+
+export const fetchVideoComments = async (id) => {
+  try {
+    const data = await fetchFromAPI(
+      `commentThreads?part=snippet&videoId=${id}`
+    );
+    return data.items ?? [];
+  } catch {
+    return [];
+  }
+};
