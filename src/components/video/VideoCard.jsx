@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -7,9 +7,10 @@ import {
   Card,
   CardContent,
   CardMedia,
+  IconButton,
   Typography,
 } from '@mui/material';
-import { CheckCircle } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, CheckCircle } from '@mui/icons-material';
 
 import { formatRelativeTime } from '../../utils/formatRelativeTime';
 import {
@@ -18,6 +19,7 @@ import {
   demoChannelUrl,
   demoChannelTitle,
 } from '../../utils/constants';
+import { isInWatchLater, toggleWatchLater } from '../../utils/watchLater';
 
 const VideoCard = memo(
   ({
@@ -26,9 +28,23 @@ const VideoCard = memo(
       snippet,
     },
   }) => {
+    const [saved, setSaved] = useState(isInWatchLater(videoId));
     const title = snippet?.title || demoVideoTitle;
     const channelTitle = snippet?.channelTitle || demoChannelTitle;
     const channelId = snippet?.channelId;
+
+    const handleToggle = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleWatchLater({
+        id: videoId,
+        title,
+        channelTitle,
+        channelId,
+        thumbnail: snippet?.thumbnails?.high?.url,
+      });
+      setSaved((s) => !s);
+    };
 
     return (
       <Card
@@ -43,23 +59,47 @@ const VideoCard = memo(
           },
         }}
       >
-        <Link
-          to={videoId ? `/video/${videoId}` : demoVideoUrl}
-          aria-label={`Open video ${title}`}
-        >
-          <CardMedia
-            image={snippet?.thumbnails?.high?.url}
-            alt={snippet?.title}
+        <Box sx={{ position: 'relative' }}>
+          <Link
+            to={videoId ? `/video/${videoId}` : demoVideoUrl}
+            aria-label={`Open video ${title}`}
+          >
+            <CardMedia
+              image={snippet?.thumbnails?.high?.url}
+              alt={snippet?.title}
+              sx={{
+                width: { xs: '100%', sm: '358px' },
+                height: 180,
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                },
+              }}
+            />
+          </Link>
+          <IconButton
+            aria-label={
+              saved ? 'Remove from watch later' : 'Save to watch later'
+            }
+            onClick={handleToggle}
+            size="small"
             sx={{
-              width: { xs: '100%', sm: '358px' },
-              height: 180,
-              transition: 'transform 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.05)',
-              },
+              position: 'absolute',
+              bottom: 4,
+              right: 4,
+              bgcolor: 'rgba(0,0,0,0.7)',
+              color: saved ? 'primary.main' : '#fff',
+              '&:hover': { bgcolor: 'rgba(0,0,0,0.9)', opacity: 1 },
+              opacity: { xs: 1, sm: 0.9 },
             }}
-          />
-        </Link>
+          >
+            {saved ? (
+              <Bookmark fontSize="small" />
+            ) : (
+              <BookmarkBorder fontSize="small" />
+            )}
+          </IconButton>
+        </Box>
         <CardContent
           sx={{
             bgcolor: 'background.paper',
