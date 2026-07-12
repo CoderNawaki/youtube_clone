@@ -1,17 +1,24 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Chip, CircularProgress, Stack, Typography } from '@mui/material';
 import { fetchSearchVideos } from '../../utils/fetchFromAPI';
 import { useInfiniteScroll } from '../../hooks';
 import { Videos, ErrorState, VideoGridSkeleton } from '../';
 
+const FILTERS = [
+  { label: 'All', value: 'all' },
+  { label: 'Videos', value: 'video' },
+  { label: 'Channels', value: 'channel' },
+];
+
 const SearchFeed = () => {
   const { searchTerm } = useParams();
+  const [filter, setFilter] = useState('all');
   const loadVideos = useCallback(
     (pageToken) => {
-      return fetchSearchVideos(searchTerm, pageToken);
+      return fetchSearchVideos(searchTerm, pageToken, filter);
     },
-    [searchTerm]
+    [searchTerm, filter]
   );
 
   const {
@@ -43,9 +50,21 @@ const SearchFeed = () => {
         Search Results for:
         <Box component="span" sx={{ color: 'primary.main' }}>
           {searchTerm}
-        </Box>{' '}
-        Videos
+        </Box>
       </Typography>
+
+      <Stack direction="row" spacing={1} mb={2}>
+        {FILTERS.map((f) => (
+          <Chip
+            key={f.value}
+            label={f.label}
+            onClick={() => setFilter(f.value)}
+            variant={filter === f.value ? 'filled' : 'outlined'}
+            color={filter === f.value ? 'primary' : 'default'}
+            sx={{ borderRadius: 20, cursor: 'pointer' }}
+          />
+        ))}
+      </Stack>
 
       {isLoading ? (
         <VideoGridSkeleton count={8} />
