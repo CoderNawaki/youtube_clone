@@ -111,8 +111,12 @@ export const fetchFromAPI = async (url, pageToken) => {
   }
 };
 
-export const fetchSearchVideos = async (query, pageToken) => {
-  const data = await fetchFromAPI(`search?part=snippet&q=${query}`, pageToken);
+export const fetchSearchVideos = async (query, pageToken, type) => {
+  let url = `search?part=snippet&q=${encodeURIComponent(query)}`;
+  if (type && type !== 'all') {
+    url += `&type=${type}`;
+  }
+  const data = await fetchFromAPI(url, pageToken);
   return { items: data.items ?? [], nextPageToken: data.nextPageToken ?? null };
 };
 

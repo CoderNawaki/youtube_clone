@@ -26,6 +26,7 @@ export const useInfiniteScroll = ({
     loaderRef.current = loader;
     setItems([]);
     setNextPageToken(null);
+    setIsLoading(true);
   }
 
   const loadInitial = useCallback(async () => {
