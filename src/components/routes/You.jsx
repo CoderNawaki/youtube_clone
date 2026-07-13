@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Box, Chip, Divider, Stack, Typography } from '@mui/material';
 import {
+  Bookmark,
   History,
   Subscriptions as SubscriptionsIcon,
   VideoLibrary,
@@ -11,6 +12,7 @@ import {
   getSubscriptions,
   getSubscriptionCount,
 } from '../../utils/subscriptions';
+import { getWatchLater, getWatchLaterCount } from '../../utils/watchLater';
 import { Videos } from '../';
 import SubscriptionCard from '../shared/SubscriptionCard';
 import { Link } from 'react-router-dom';
@@ -25,10 +27,22 @@ const toVideoItem = (rw) => ({
   },
 });
 
+const toWLVideoItem = (wl) => ({
+  id: { videoId: wl.id },
+  snippet: {
+    title: wl.title,
+    channelTitle: wl.channelTitle,
+    channelId: wl.channelId,
+    thumbnails: { high: { url: wl.thumbnail } },
+  },
+});
+
 const You = () => {
   const recentlyWatched = useMemo(() => getRecentlyWatched(), []);
   const subs = useMemo(() => getSubscriptions(), []);
   const subCount = useMemo(() => getSubscriptionCount(), []);
+  const watchLater = useMemo(() => getWatchLater(), []);
+  const wlCount = useMemo(() => getWatchLaterCount(), []);
 
   return (
     <Box
@@ -109,6 +123,21 @@ const You = () => {
               </Box>
             ))}
           </Stack>
+        </Box>
+      )}
+
+      {watchLater.length > 0 && (
+        <Box mb={3}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            mb={1}
+            sx={{ color: 'text.primary' }}
+          >
+            <Bookmark sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }} />
+            Watch later ({wlCount})
+          </Typography>
+          <Videos videos={watchLater.map(toWLVideoItem)} />
         </Box>
       )}
 
