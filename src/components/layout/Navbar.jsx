@@ -8,10 +8,17 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { ArrowBack, NotificationsNone, Search } from '@mui/icons-material';
+import {
+  ArrowBack,
+  DarkMode,
+  LightMode,
+  NotificationsNone,
+  Search,
+} from '@mui/icons-material';
 
 import { logo } from '../../utils/constants';
 import SearchBar from './SearchBar';
+import { useThemeMode } from '../../context/ThemeModeContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -19,6 +26,7 @@ const Navbar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSearch, setShowSearch] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const { mode, toggle: toggleTheme } = useThemeMode();
 
   const handleSearchClick = useCallback(() => {
     if (isMobile) {
@@ -83,6 +91,15 @@ const Navbar = () => {
         </Link>
 
         <Stack direction="row" alignItems="center" gap={0.5}>
+          <IconButton
+            aria-label={
+              mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+            }
+            onClick={toggleTheme}
+            sx={{ color: 'text.primary' }}
+          >
+            {mode === 'dark' ? <LightMode /> : <DarkMode />}
+          </IconButton>
           <IconButton
             aria-label="Notifications"
             onClick={() => setNotifOpen(true)}

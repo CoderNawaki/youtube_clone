@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useMemo } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,7 +12,8 @@ import {
 import MobileBottomNav from './components/layout/MobileBottomNav';
 import { LoadingBarProvider } from './components/layout/TopLoadingBar';
 import { SidebarProvider } from './context/SidebarContext';
-import { theme } from './themes/';
+import { ThemeModeProvider, useThemeMode } from './context/ThemeModeContext';
+import { createAppTheme } from './themes/';
 
 const Feed = lazy(() => import('./components/routes/Feed'));
 const VideoDetail = lazy(() => import('./components/routes/VideoDetail'));
@@ -90,8 +91,11 @@ const AnimatedRoutes = () => {
   );
 };
 
-const App = () => (
-  <BrowserRouter>
+const ThemedApp = () => {
+  const { mode } = useThemeMode();
+  const theme = useMemo(() => createAppTheme(mode), [mode]);
+
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box sx={{ backgroundColor: 'background.default' }}>
@@ -108,6 +112,14 @@ const App = () => (
         </AppErrorBoundary>
       </Box>
     </ThemeProvider>
+  );
+};
+
+const App = () => (
+  <BrowserRouter>
+    <ThemeModeProvider>
+      <ThemedApp />
+    </ThemeModeProvider>
   </BrowserRouter>
 );
 
