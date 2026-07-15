@@ -1,1 +1,1 @@
-export { default as theme } from './theme';
+export { createAppTheme } from './theme';
