@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import ReactPlayer from 'react-player';
 
@@ -9,7 +9,9 @@ import {
   Button,
   Chip,
   Divider,
+  FormControlLabel,
   Stack,
+  Switch,
   Typography,
 } from '@mui/material';
 import {
@@ -22,7 +24,7 @@ import {
 } from '@mui/icons-material';
 import { Videos, LoadingState, ErrorState } from '../';
 
-import { useAsyncResource } from '../../hooks';
+import { useAsyncResource, usePersistedState } from '../../hooks';
 import {
   fetchChannelDetails,
   fetchRelatedVideos,
@@ -36,15 +38,23 @@ import {
 } from '../../utils/videoInteractions';
 
 const abbreviateNumber = (num) => {
-  if (!num) {return null;}
+  if (!num) {
+    return null;
+  }
   const n = parseInt(num, 10);
-  if (n >= 1000000) {return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';}
-  if (n >= 1000) {return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';}
+  if (n >= 1000000) {
+    return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (n >= 1000) {
+    return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
   return n.toLocaleString();
 };
 
 const formatPublishedDate = (dateStr) => {
-  if (!dateStr) {return '';}
+  if (!dateStr) {
+    return '';
+  }
   const date = new Date(dateStr);
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -137,6 +147,15 @@ const VideoDetail = () => {
   } = videoDetail ?? { snippet: {}, statistics: {} };
 
   const subscriberCount = channelDetail?.statistics?.subscriberCount;
+  const navigate = useNavigate();
+  const [autoplay, setAutoplay] = usePersistedState('yt_autoplay', true);
+  const nextVideo = videos.find((v) => v.id?.videoId);
+
+  const handleVideoEnded = () => {
+    if (autoplay && nextVideo) {
+      navigate(`/video/${nextVideo.id.videoId}`);
+    }
+  };
 
   useEffect(() => {
     if (!videoDetail?.snippet) {
@@ -186,6 +205,7 @@ const VideoDetail = () => {
               url={`https://www.youtube.com/watch/?v=${id}`}
               className="react-player"
               controls
+              onEnded={handleVideoEnded}
             />
 
             <Typography
@@ -387,6 +407,21 @@ const VideoDetail = () => {
           justifyContent="center"
           alignItems="center"
         >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={autoplay}
+                onChange={(e) => setAutoplay(e.target.checked)}
+                size="small"
+              />
+            }
+            label="Autoplay next video"
+            sx={{
+              mb: 1,
+              color: 'text.secondary',
+              '& .MuiTypography-root': { fontSize: 13 },
+            }}
+          />
           <Videos videos={videos} direction="column" />
         </Box>
       </Stack>
