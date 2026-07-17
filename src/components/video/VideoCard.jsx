@@ -8,9 +8,15 @@ import {
   CardContent,
   CardMedia,
   IconButton,
+  Stack,
   Typography,
 } from '@mui/material';
-import { Bookmark, BookmarkBorder, CheckCircle } from '@mui/icons-material';
+import {
+  Bookmark,
+  BookmarkBorder,
+  CheckCircle,
+  PlaylistAdd,
+} from '@mui/icons-material';
 
 import { formatRelativeTime } from '../../utils/formatRelativeTime';
 import {
@@ -20,6 +26,7 @@ import {
   demoChannelTitle,
 } from '../../utils/constants';
 import { isInWatchLater, toggleWatchLater } from '../../utils/watchLater';
+import PlaylistMenu from '../shared/PlaylistMenu';
 
 const VideoCard = memo(
   ({
@@ -29,6 +36,7 @@ const VideoCard = memo(
     },
   }) => {
     const [saved, setSaved] = useState(isInWatchLater(videoId));
+    const [playlistOpen, setPlaylistOpen] = useState(false);
     const title = snippet?.title || demoVideoTitle;
     const channelTitle = snippet?.channelTitle || demoChannelTitle;
     const channelId = snippet?.channelId;
@@ -77,28 +85,63 @@ const VideoCard = memo(
               }}
             />
           </Link>
-          <IconButton
-            aria-label={
-              saved ? 'Remove from watch later' : 'Save to watch later'
-            }
-            onClick={handleToggle}
-            size="small"
+          <Stack
+            direction="row"
+            spacing={0.5}
             sx={{
               position: 'absolute',
               bottom: 4,
               right: 4,
-              bgcolor: 'rgba(0,0,0,0.7)',
-              color: saved ? 'primary.main' : '#fff',
-              '&:hover': { bgcolor: 'rgba(0,0,0,0.9)', opacity: 1 },
-              opacity: { xs: 1, sm: 0.9 },
             }}
           >
-            {saved ? (
-              <Bookmark fontSize="small" />
-            ) : (
-              <BookmarkBorder fontSize="small" />
-            )}
-          </IconButton>
+            <IconButton
+              aria-label={
+                saved ? 'Remove from watch later' : 'Save to watch later'
+              }
+              onClick={handleToggle}
+              size="small"
+              sx={{
+                bgcolor: 'rgba(0,0,0,0.7)',
+                color: saved ? 'primary.main' : '#fff',
+                '&:hover': { bgcolor: 'rgba(0,0,0,0.9)' },
+                opacity: { xs: 1, sm: 0.9 },
+              }}
+            >
+              {saved ? (
+                <Bookmark fontSize="small" />
+              ) : (
+                <BookmarkBorder fontSize="small" />
+              )}
+            </IconButton>
+            <IconButton
+              aria-label="Save to playlist"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setPlaylistOpen(true);
+              }}
+              size="small"
+              sx={{
+                bgcolor: 'rgba(0,0,0,0.7)',
+                color: '#fff',
+                '&:hover': { bgcolor: 'rgba(0,0,0,0.9)' },
+                opacity: { xs: 1, sm: 0.9 },
+              }}
+            >
+              <PlaylistAdd fontSize="small" />
+            </IconButton>
+          </Stack>
+          <PlaylistMenu
+            open={playlistOpen}
+            onClose={() => setPlaylistOpen(false)}
+            video={{
+              id: videoId,
+              title,
+              channelTitle,
+              channelId,
+              thumbnail: snippet?.thumbnails?.high?.url,
+            }}
+          />
         </Box>
         <CardContent
           sx={{

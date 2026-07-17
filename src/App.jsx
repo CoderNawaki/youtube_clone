@@ -22,6 +22,7 @@ const SearchFeed = lazy(() => import('./components/routes/SearchFeed'));
 const Shorts = lazy(() => import('./components/routes/Shorts'));
 const Subscriptions = lazy(() => import('./components/routes/Subscriptions'));
 const You = lazy(() => import('./components/routes/You'));
+const PlaylistPage = lazy(() => import('./components/routes/PlaylistPage'));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -83,6 +84,14 @@ const AnimatedRoutes = () => {
           element={
             <AnimatedPage>
               <You />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/playlist/:id"
+          element={
+            <AnimatedPage>
+              <PlaylistPage />
             </AnimatedPage>
           }
         />
