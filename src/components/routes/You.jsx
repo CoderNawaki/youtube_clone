@@ -3,11 +3,13 @@ import { Box, Chip, Divider, Stack, Typography } from '@mui/material';
 import {
   Bookmark,
   History,
+  PlaylistPlay,
   Subscriptions as SubscriptionsIcon,
   VideoLibrary,
   Person,
 } from '@mui/icons-material';
 import { getRecentlyWatched } from '../../utils/recentlyWatched';
+import { getPlaylists } from '../../utils/playlists';
 import {
   getSubscriptions,
   getSubscriptionCount,
@@ -43,6 +45,7 @@ const You = () => {
   const subCount = useMemo(() => getSubscriptionCount(), []);
   const watchLater = useMemo(() => getWatchLater(), []);
   const wlCount = useMemo(() => getWatchLaterCount(), []);
+  const playlists = useMemo(() => getPlaylists(), []);
 
   return (
     <Box
@@ -121,6 +124,36 @@ const You = () => {
               >
                 <SubscriptionCard sub={sub} />
               </Box>
+            ))}
+          </Stack>
+        </Box>
+      )}
+
+      {playlists.length > 0 && (
+        <Box mb={3}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            mb={1}
+            sx={{ color: 'text.primary' }}
+          >
+            <PlaylistPlay
+              sx={{ fontSize: 20, verticalAlign: 'middle', mr: 0.5 }}
+            />
+            Playlists
+          </Typography>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {playlists.map((p) => (
+              <Chip
+                key={p.id}
+                label={`${p.name} (${p.videos.length})`}
+                component={Link}
+                to={`/playlist/${p.id}`}
+                icon={<PlaylistPlay />}
+                variant="outlined"
+                clickable
+                sx={{ borderRadius: 20 }}
+              />
             ))}
           </Stack>
         </Box>
