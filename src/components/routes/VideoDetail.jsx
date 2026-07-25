@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import ReactPlayer from 'react-player';
@@ -25,6 +25,7 @@ import {
 import { Videos, LoadingState, ErrorState } from '../';
 
 import { useAsyncResource, usePersistedState } from '../../hooks';
+import PlayerControls from '../video/PlayerControls';
 import {
   fetchChannelDetails,
   fetchRelatedVideos,
@@ -36,6 +37,8 @@ import {
   getVideoLikeStatus,
   setVideoLike,
 } from '../../utils/videoInteractions';
+
+const SPEEDS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
 const abbreviateNumber = (num) => {
   if (!num) {
@@ -149,6 +152,8 @@ const VideoDetail = () => {
   const subscriberCount = channelDetail?.statistics?.subscriberCount;
   const navigate = useNavigate();
   const [autoplay, setAutoplay] = usePersistedState('yt_autoplay', true);
+  const [playbackRate, setPlaybackRate] = usePersistedState('yt_speed', 1);
+  const playerRef = useRef(null);
   const nextVideo = videos.find((v) => v.id?.videoId);
 
   const handleVideoEnded = () => {
@@ -169,6 +174,71 @@ const VideoDetail = () => {
       thumbnail: videoDetail.snippet.thumbnails?.high?.url || '',
     });
   }, [id, title, channelTitle, channelId, videoDetail]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const internal = playerRef.current?.getInternalPlayer?.();
+      if (!internal?.getPlayerState) {
+        return;
+      }
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        return;
+      }
+
+      switch (e.key) {
+        case ' ':
+        case 'k': {
+          e.preventDefault();
+          const state = internal.getPlayerState();
+          state === 1 ? internal.pauseVideo() : internal.playVideo();
+          break;
+        }
+        case 'ArrowRight':
+          e.preventDefault();
+          internal.seekTo(
+            Math.min(internal.getCurrentTime() + 5, internal.getDuration())
+          );
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          internal.seekTo(Math.max(internal.getCurrentTime() - 5, 0));
+          break;
+        case 'f': {
+          e.preventDefault();
+          const container = playerRef.current?.getContainer?.();
+          if (container) {
+            document.fullscreenElement
+              ? document.exitFullscreen?.()
+              : container.requestFullscreen?.();
+          }
+          break;
+        }
+        case 'm': {
+          e.preventDefault();
+          internal.isMuted?.() ? internal.unMute?.() : internal.mute?.();
+          break;
+        }
+        case '<': {
+          e.preventDefault();
+          const idx = SPEEDS.indexOf(playbackRate);
+          if (idx > 0) {setPlaybackRate(SPEEDS[idx - 1]);}
+          break;
+        }
+        case '>': {
+          e.preventDefault();
+          const idx2 = SPEEDS.indexOf(playbackRate);
+          if (idx2 < SPEEDS.length - 1) {setPlaybackRate(SPEEDS[idx2 + 1]);}
+          break;
+        }
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [playbackRate, setPlaybackRate]);
 
   if (isLoading) {
     return <LoadingState message="Loading video details..." />;
@@ -202,10 +272,17 @@ const VideoDetail = () => {
         <Box flex={1} sx={{ px: { xs: 0, md: 2 }, pt: { xs: 0, md: 2 } }}>
           <Box sx={{ width: '100%', position: 'sticky', top: '86px' }}>
             <ReactPlayer
-              url={`https://www.youtube.com/watch/?v=${id}`}
+              ref={playerRef}
+              url={`https://www.youtube.com/watch?v=${id}`}
               className="react-player"
               controls
+              playbackRate={playbackRate}
               onEnded={handleVideoEnded}
+            />
+            <PlayerControls
+              playerRef={playerRef}
+              playbackRate={playbackRate}
+              onRateChange={setPlaybackRate}
             />
 
             <Typography
