@@ -120,6 +120,14 @@ export const fetchSearchVideos = async (query, pageToken, type) => {
   return { items: data.items ?? [], nextPageToken: data.nextPageToken ?? null };
 };
 
+export const fetchTrendingVideos = async (pageToken) => {
+  const data = await fetchFromAPI(
+    'videos?part=snippet,statistics&chart=mostPopular&regionCode=US',
+    pageToken
+  );
+  return { items: data.items ?? [], nextPageToken: data.nextPageToken ?? null };
+};
+
 export const fetchVideoDetails = async (id) => {
   const data = await fetchFromAPI(`videos?part=snippet,statistics&id=${id}`);
   return data.items?.[0] ?? null;
