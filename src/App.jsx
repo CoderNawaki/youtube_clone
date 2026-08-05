@@ -19,6 +19,7 @@ const Feed = lazy(() => import('./components/routes/Feed'));
 const VideoDetail = lazy(() => import('./components/routes/VideoDetail'));
 const ChannelDetail = lazy(() => import('./components/routes/ChannelDetail'));
 const SearchFeed = lazy(() => import('./components/routes/SearchFeed'));
+const Trending = lazy(() => import('./components/routes/Trending'));
 const Shorts = lazy(() => import('./components/routes/Shorts'));
 const Subscriptions = lazy(() => import('./components/routes/Subscriptions'));
 const You = lazy(() => import('./components/routes/You'));
@@ -68,6 +69,14 @@ const AnimatedRoutes = () => {
           element={
             <AnimatedPage>
               <Shorts />
+            </AnimatedPage>
+          }
+        />
+        <Route
+          path="/trending"
+          element={
+            <AnimatedPage>
+              <Trending />
             </AnimatedPage>
           }
         />

@@ -1,9 +1,11 @@
 import { memo } from 'react';
 import { Chip, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { categories } from '../../utils/constants';
 
 const CategoryChips = memo(({ selectedCategory, setSelectedCategory }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   if (!isMobile) {
@@ -29,7 +31,11 @@ const CategoryChips = memo(({ selectedCategory, setSelectedCategory }) => {
         <Chip
           key={category.name}
           label={category.name}
-          onClick={() => setSelectedCategory(category.name)}
+          onClick={() =>
+            category.route
+              ? navigate(category.route)
+              : setSelectedCategory(category.name)
+          }
           variant={category.name === selectedCategory ? 'filled' : 'outlined'}
           color={category.name === selectedCategory ? 'primary' : 'default'}
           sx={{
