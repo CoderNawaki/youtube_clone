@@ -10,6 +10,7 @@ import {
   AnimatedPage,
 } from './components/';
 import MobileBottomNav from './components/layout/MobileBottomNav';
+import GlobalShortcuts from './components/layout/GlobalShortcuts';
 import { LoadingBarProvider } from './components/layout/TopLoadingBar';
 import { SidebarProvider } from './context/SidebarContext';
 import { ThemeModeProvider, useThemeMode } from './context/ThemeModeContext';
@@ -126,6 +127,7 @@ const ThemedApp = () => {
               </Suspense>
             </LoadingBarProvider>
             <MobileBottomNav />
+            <GlobalShortcuts />
           </SidebarProvider>
         </AppErrorBoundary>
       </Box>
